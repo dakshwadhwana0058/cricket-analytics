@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cricket Analytics Pro</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      text-align: center;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 20px auto;
+      width: 320px;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px gray;
+    }
+
+    input {
+      margin: 8px;
+      padding: 10px;
+      width: 80%;
+    }
+
+    button {
+      padding: 10px 20px;
+      background: #27ae60;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 20px;
+      white-space: pre-line;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🏏 Cricket Analytics Pro</h1>
+
+  <div class="card">
+    <h3>Player 1</h3>
+    <input type="text" id="name1" placeholder="Player Name">
+    <input type="number" id="runs1" placeholder="Runs">
+    <input type="number" id="balls1" placeholder="Balls">
+  </div>
+
+  <div class="card">
+    <h3>Player 2</h3>
+    <input type="text" id="name2" placeholder="Player Name">
+    <input type="number" id="runs2" placeholder="Runs">
+    <input type="number" id="balls2" placeholder="Balls">
+  </div>
+
+  <button onclick="compare()">Compare Players</button>
+
+  <h2 id="result"></h2>
+
+  <script>
+    function compare() {
+
+      let name1 = document.getElementById("name1").value;
+      let name2 = document.getElementById("name2").value;
+
+      let r1 = document.getElementById("runs1").value;
+      let b1 = document.getElementById("balls1").value;
+
+      let r2 = document.getElementById("runs2").value;
+      let b2 = document.getElementById("balls2").value;
+
+      if (b1 == 0 || b2 == 0) {
+        document.getElementById("result").innerText = "Balls cannot be 0";
+        return;
+      }
+
+      let sr1 = (r1 / b1) * 100;
+      let sr2 = (r2 / b2) * 100;
+
+      let winner = "";
+
+      if (sr1 > sr2) {
+        winner = "🏆 " + name1 + " is better";
+      } else if (sr2 > sr1) {
+        winner = "🏆 " + name2 + " is better";
+      } else {
+        winner = "🤝 Both are equal";
+      }
+
+      document.getElementById("result").innerText =
+        name1 + " SR: " + sr1.toFixed(2) + "\n" +
+        name2 + " SR: " + sr2.toFixed(2) + "\n\n" +
+        winner;
+    }
+  </script>
+
+</body>
+</html>
