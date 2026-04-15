@@ -4,8 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cricket Analytics | Data Dashboard</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS START --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: #1a1a1a;
+            background-color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        /* --- NAVIGATION --- */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 5%;
+            background: #0f172a;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+        .logo span { color: #38bdf8; }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover { color: white; }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 60vh;
+            background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
+                        url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 { font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 30px;
+            background: #38bdf8;
+            color: #0f172a;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover { transform: translateY(-3px); }
+
+        /* --- CONTENT --- */
+        .container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
+
+        .section { margin-bottom: 60px; }
+        .section-title { margin-bottom: 30px; font-size: 1.8rem; border-left: 5px solid #38bdf8; padding-left: 15px; }
+
+        /* --- STATS GRID (MOBILE FIRST) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr; 
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .card h3 { color: #64748b; font-size: 1rem; margin-bottom: 10px; }
+        .card .value { font-size: 2.5rem; font-weight: 800; color: #0f172a; }
+
+        .trend { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; }
+        .trend.up { color: #22c55e; }
+        .trend.down { color: #ef4444; }
+
+        .analysis-box {
+            background: #e2e8f0;
+            padding: 30px;
+            border-radius: 15px;
+            font-style: italic;
+        }
+
+        /* --- TABLETS & DESKTOP BREAKPOINT --- */
+        @media (min-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr); 
+            }
+            .navbar { padding: 1.2rem 10%; }
+        }
+
+        footer {
+            background: #0f172a;
+            color: #94a3b8;
+            text-align: center;
+            padding: 40px 20px;
+            font-size: 0.9rem;
+        }
+        /* --- CSS END --- */
+    </style>
 </head>
 <body>
 
@@ -62,132 +192,3 @@
 
 </body>
 </html>
-/* --- RESET --- */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Outfit', sans-serif;
-    color: #1a1a1a;
-    background-color: #f8fafc;
-    line-height: 1.6;
-}
-
-/* --- NAVIGATION --- */
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1.2rem 5%;
-    background: #0f172a;
-    color: white;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.logo { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
-.logo span { color: #38bdf8; }
-
-.nav-links {
-    display: flex;
-    list-style: none;
-    gap: 20px;
-}
-
-.nav-links a {
-    color: #cbd5e1;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: 0.3s;
-}
-
-.nav-links a:hover { color: white; }
-
-/* --- HERO SECTION --- */
-.hero {
-    height: 60vh;
-    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
-                url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200&q=80');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    padding: 0 20px;
-}
-
-.hero h1 { font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 1rem; }
-.hero p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
-
-.btn {
-    display: inline-block;
-    margin-top: 25px;
-    padding: 12px 30px;
-    background: #38bdf8;
-    color: #0f172a;
-    text-decoration: none;
-    border-radius: 50px;
-    font-weight: 600;
-    transition: transform 0.2s;
-}
-
-.btn:hover { transform: translateY(-3px); }
-
-/* --- CONTENT --- */
-.container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
-
-.section { margin-bottom: 60px; }
-.section-title { margin-bottom: 30px; font-size: 1.8rem; border-left: 5px solid #38bdf8; padding-left: 15px; }
-
-/* --- STATS GRID (MOBILE FIRST) --- */
-.stats-grid {
-    display: grid;
-    grid-template-columns: 1fr; /* Stack vertically on phones */
-    gap: 20px;
-}
-
-.card {
-    background: white;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.card h3 { color: #64748b; font-size: 1rem; margin-bottom: 10px; }
-.card .value { font-size: 2.5rem; font-weight: 800; color: #0f172a; }
-
-.trend { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; }
-.trend.up { color: #22c55e; }
-.trend.down { color: #ef4444; }
-
-/* --- ANALYSIS BOX --- */
-.analysis-box {
-    background: #e2e8f0;
-    padding: 30px;
-    border-radius: 15px;
-    font-style: italic;
-}
-
-/* --- TABLETS & DESKTOP --- */
-@media (min-width: 768px) {
-    .stats-grid {
-        grid-template-columns: repeat(3, 1fr); /* 3 Columns on desktop */
-    }
-    
-    .navbar { padding: 1.2rem 10%; }
-}
-
-footer {
-    background: #0f172a;
-    color: #94a3b8;
-    text-align: center;
-    padding: 40px 20px;
-    font-size: 0.9rem;
-}
