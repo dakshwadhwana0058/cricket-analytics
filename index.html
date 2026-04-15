@@ -3,211 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cricket Analytics | Turf Scorer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <title>Turf Match Pro</title>
     <style>
-        /* --- STYLING --- */
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #f0f4f8; 
-            color: #1a202c;
-            line-height: 1.5;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #0f172a; color: white; padding: 15px; }
 
-        nav {
-            background: #0f172a;
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            font-weight: 900;
-            letter-spacing: 1px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+        /* Header & Team Toggle */
+        .header { text-align: center; padding: 10px; border-bottom: 1px solid #334155; margin-bottom: 15px; }
+        .team-toggle { display: flex; gap: 10px; margin-bottom: 15px; }
+        .team-btn { flex: 1; padding: 10px; border: none; border-radius: 5px; background: #334155; color: white; font-weight: bold; }
+        .active-team { background: #38bdf8; color: #0f172a; }
 
-        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+        /* Inputs */
+        .input-group { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; width: 100%; }
 
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 700;
-            margin: 20px 0 10px 0;
-            color: #334155;
-            text-transform: uppercase;
-        }
+        /* Main Scoreboard */
+        .scoreboard { background: #1e293b; border-radius: 20px; padding: 25px; text-align: center; margin-bottom: 15px; box-shadow: 0 10px 15px rgba(0,0,0,0.3); }
+        #team-label { color: #38bdf8; text-transform: uppercase; font-weight: bold; font-size: 0.9rem; }
+        #main-score { font-size: 4.5rem; font-weight: 800; color: #fbbf24; margin: 5px 0; }
+        .stats-row { display: flex; justify-content: space-around; color: #94a3b8; font-weight: bold; }
 
-        /* Scoreboard Card */
-        .scoreboard-card {
-            background: #0f172a;
-            color: white;
-            padding: 30px 20px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            margin-bottom: 25px;
-        }
-
-        .score-display {
-            font-size: 4.5rem;
-            font-weight: 900;
-            color: #fbbf24;
-            line-height: 1;
-        }
-
-        .overs-display {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            margin-bottom: 20px;
-        }
+        /* Target Section */
+        .target-box { background: #334155; padding: 10px; border-radius: 10px; margin-top: 15px; font-size: 0.9rem; }
+        #needed { color: #fbbf24; font-weight: bold; }
 
         /* Buttons */
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 12px;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        button {
-            border: none;
-            border-radius: 12px;
-            padding: 18px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.1s, opacity 0.2s;
-            color: white;
-        }
-
-        button:active { transform: scale(0.95); }
-
-        .btn-run { background: #38bdf8; color: #0f172a; }
-        .btn-boundary { background: #22c55e; }
-        .btn-six { background: #8b5cf6; }
-        .btn-out { background: #ef4444; }
-        .btn-reset { background: #64748b; }
-
-        /* KPI Section */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-
-        .kpi-card {
-            background: white;
-            padding: 15px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .kpi-card h4 { font-size: 0.8rem; color: #64748b; }
-        .kpi-card p { font-size: 1.2rem; font-weight: 700; }
-
-        footer { text-align: center; padding: 30px; color: #94a3b8; font-size: 0.8rem; }
-
+        .btn-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        button.action { border: none; padding: 20px; border-radius: 12px; font-size: 1.2rem; font-weight: bold; color: white; cursor: pointer; }
+        .run { background: #38bdf8; color: #0f172a; }
+        .out { background: #ef4444; grid-column: span 2; }
+        .reset { background: #64748b; padding: 10px; font-size: 0.8rem; margin-top: 20px; width: 100%; border: none; color: white; border-radius: 5px; }
     </style>
 </head>
 <body>
 
-    <nav>CRICKET ANALYTICS</nav>
+    <div class="header">TURF PRO DASHBOARD</div>
 
-    <main class="container">
-        
-        <h2 class="section-title">Live Turf Scorer</h2>
-        
-        <div class="scoreboard-card">
-            <div class="score-display" id="main-score">0 - 0</div>
-            <div class="overs-display">Overs: <span id="overs-count">0.0</span></div>
-            
-            <div class="grid-3">
-                <button class="btn-run" onclick="addBall(1)">+1</button>
-                <button class="btn-boundary" onclick="addBall(4)">4</button>
-                <button class="btn-six" onclick="addBall(6)">6</button>
-            </div>
+    <div class="team-toggle">
+        <button id="btnA" class="team-btn active-team" onclick="setTeam('Team A')">Team A</button>
+        <button id="btnB" class="team-btn" onclick="setTeam('Team B')">Team B</button>
+    </div>
 
-            <div class="grid-2">
-                <button class="btn-out" onclick="takeWicket()">WICKET</button>
-                <button class="btn-reset" onclick="resetMatch()">RESET</button>
-            </div>
+    <div class="input-group">
+        <input type="text" id="p_name" placeholder="Batsman Name">
+        <input type="number" id="target_val" placeholder="Target Score" oninput="updateTarget()">
+    </div>
+
+    <div class="scoreboard">
+        <div id="team-label">Team A Batting</div>
+        <h1 id="main-score">0 - 0</h1>
+        <div class="stats-row">
+            <span>OVERS: <span id="overs">0.0</span></span>
+            <span>RR: <span id="rr">0.0</span></span>
         </div>
 
-        <h2 class="section-title">Match KPI</h2>
-        <div class="kpi-grid">
-            <div class="kpi-card">
-                <h4>Run Rate</h4>
-                <p id="run-rate">0.00</p>
-            </div>
-            <div class="kpi-card">
-                <h4>Projection</h4>
-                <p id="projection">0</p>
-            </div>
+        <div class="target-box" id="target-display" style="display: none;">
+            Need <span id="needed">0</span> runs to win
         </div>
+    </div>
 
-    </main>
+    <div class="btn-grid">
+        <button class="action run" onclick="add(1)">+1</button>
+        <button class="action run" onclick="add(4)">4</button>
+        <button class="action run" onclick="add(6)">6</button>
+        <button class="action out" onclick="wicket()">WICKET</button>
+        <button class="action run" onclick="add(0)" style="background: #475569;">0</button>
+    </div>
 
-    <footer>
-        &copy; 2026 Cricket Analytics Dashboard<br>
-        Designed for Turf Matches
-    </footer>
+    <button class="reset" onclick="reset()">RESET MATCH</button>
 
     <script>
-        let runs = 0;
-        let wickets = 0;
-        let totalBalls = 0;
+        let runs = 0, wickets = 0, balls = 0;
+        let currentTeam = "Team A";
 
-        function addBall(amt) {
-            runs += amt;
-            totalBalls += 1;
-            updateDisplay();
+        function setTeam(name) {
+            currentTeam = name;
+            document.getElementById('team-label').innerText = name + " Batting";
+            document.getElementById('btnA').classList.toggle('active-team', name === 'Team A');
+            document.getElementById('btnB').classList.toggle('active-team', name === 'Team B');
         }
 
-        function takeWicket() {
-            if (wickets < 10) {
-                wickets++;
-                totalBalls += 1;
-                updateDisplay();
+        function updateTarget() {
+            let target = document.getElementById('target_val').value;
+            let display = document.getElementById('target-display');
+            if(target > 0) {
+                display.style.display = "block";
+                document.getElementById('needed').innerText = (target - runs);
             } else {
-                alert("Team is All Out!");
+                display.style.display = "none";
             }
         }
 
-        function resetMatch() {
-            if (confirm("Reset the match?")) {
-                runs = 0;
-                wickets = 0;
-                totalBalls = 0;
-                updateDisplay();
-            }
-        }
-
-        function updateDisplay() {
-            // Calculate Overs (e.g., 7 balls = 1.1 overs)
-            let completedOvers = Math.floor(totalBalls / 6);
-            let remainingBalls = totalBalls % 6;
-            let overStr = completedOvers + "." + remainingBalls;
-            
-            // Calculate Run Rate
-            let rr = totalBalls > 0 ? (runs / (totalBalls / 6)).toFixed(2) : "0.00";
-            
-            // Calculate Projection (assuming 20 over match)
-            let proj = totalBalls > 0 ? Math.round((runs / totalBalls) * 120) : "0";
-
-            // Update UI
+        function update() {
             document.getElementById('main-score').innerText = runs + " - " + wickets;
-            document.getElementById('overs-count').innerText = overStr;
-            document.getElementById('run-rate').innerText = rr;
-            document.getElementById('projection').innerText = proj;
+            document.getElementById('overs').innerText = Math.floor(balls/6) + "." + (balls%6);
+            let runrate = balls > 0 ? (runs / (balls / 6)).toFixed(1) : "0.0";
+            document.getElementById('rr').innerText = runrate;
+            updateTarget();
+        }
+
+        function add(r) { runs += r; balls++; update(); }
+        function wicket() { if(wickets < 10) wickets++; balls++; update(); }
+        
+        function reset() {
+            if(confirm("Start new match?")) {
+                runs = 0; wickets = 0; balls = 0;
+                document.getElementById('target_val').value = '';
+                document.getElementById('p_name').value = '';
+                update();
+            }
         }
     </script>
 
