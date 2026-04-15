@@ -3,104 +3,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL 2026 Live Center</title>
+    <title>IPL Analyst Pro | Monetized</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; }
+        :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; --green: #22c55e; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; padding-bottom: 90px; }
+        body { background: var(--bg); color: #fff; padding-bottom: 100px; }
 
-        header { padding: 15px; background: rgba(15,23,42,0.8); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
-        .live-tag { background: var(--red); color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.6rem; font-weight: 900; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+        /* NAVIGATION */
+        header { padding: 15px; background: rgba(15,23,42,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; z-index: 1000; }
+        .nav-btn { color: #64748b; font-size: 0.7rem; font-weight: 800; text-align: center; cursor: pointer; }
+        .nav-btn.active { color: var(--accent); }
 
-        .container { padding: 20px; max-width: 500px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* COUNTDOWN STYLE */
-        .countdown { font-size: 2rem; font-weight: 900; color: var(--gold); margin: 15px 0; letter-spacing: 2px; }
-        .match-title { font-size: 1.2rem; font-weight: 900; margin-bottom: 5px; }
+        /* CARDS */
+        .card { background: var(--card); border-radius: 20px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
         
-        /* LIVE SCORE ENGINE STYLE */
-        #live-engine { display: none; } /* Hidden until match starts */
-        .score-row { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .team-box { flex: 1; }
-        .team-name { font-size: 1.1rem; font-weight: 900; }
-        .score-val { font-size: 1.8rem; font-weight: 900; color: var(--accent); }
-        .overs { font-size: 0.8rem; color: #64748b; }
+        /* WIN PREDICTOR */
+        .wp-container { margin: 15px 0; }
+        .wp-bar { height: 12px; background: #334155; border-radius: 6px; display: flex; overflow: hidden; margin-top: 8px; }
+        .wp-team1 { background: var(--red); transition: 0.5s; }
+        .wp-team2 { background: var(--accent); transition: 0.5s; }
 
-        /* BALL BY BALL DOTS */
-        .over-history { display: flex; gap: 8px; justify-content: center; margin-top: 20px; }
-        .ball { width: 30px; height: 30px; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; }
-        .six { background: #a855f7; color: white; }
-        .four { background: var(--accent); color: #000; }
-        .wicket { background: var(--red); color: white; }
+        /* TURF SCORER UI */
+        .scorer-big { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--gold); }
+        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .b-tool { border: none; padding: 15px; border-radius: 12px; font-weight: 800; background: #334155; color: white; }
 
-        /* MENU BAR */
-        .menu-bar { position: fixed; bottom: 20px; left: 20px; right: 20px; background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(20px); height: 65px; border-radius: 20px; display: flex; justify-content: space-around; align-items: center; border: 1px solid rgba(255,255,255,0.1); }
-        .menu-item { color: #64748b; font-size: 0.65rem; font-weight: 800; text-align: center; }
-        .active { color: var(--accent); }
+        /* STATS GRAPHS */
+        .bar-wrap { margin-bottom: 10px; }
+        .bar-fill { height: 8px; border-radius: 4px; background: var(--accent); margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; color: var(--accent);">IPL MASTER PRO</div>
-    <div id="status-tag" class="live-tag" style="background: #475569;">UPCOMING</div>
+    <div style="font-weight: 900; color: var(--accent);">IPL ANALYST 2026</div>
+    <div id="live-indicator" style="font-size: 0.7rem; color: var(--red); font-weight: 800;">● MATCH STARTING SOON</div>
 </header>
 
 <div class="container">
-    
-    <div id="pre-match" class="card">
-        <div class="match-title">RCB vs LSG</div>
-        <div style="font-size: 0.8rem; color: #94a3b8;">Match Starts at 7:30 PM IST</div>
-        <div class="countdown" id="timer">00:00:00</div>
-        <div style="font-size: 0.7rem; color: #64748b;">Live ball-by-ball updates will activate automatically.</div>
+
+    <div id="p-live" class="page active">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 800; color: var(--accent);">
+                <span>MATCH 23 • BENGALURU</span>
+                <span style="color:var(--red)">LIVE</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
+                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: 900;">RCB</div><div id="s1" style="color: var(--gold); font-size: 1.5rem; font-weight: 900;">184/4</div></div>
+                <div style="font-weight: 900; color: #334155;">VS</div>
+                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: 900;">LSG</div><div id="s2" style="color: #64748b; font-size: 1.5rem; font-weight: 900;">--</div></div>
+            </div>
+            
+            <div class="wp-container">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 900;">
+                    <span>RCB (62%)</span>
+                    <span>LSG (38%)</span>
+                </div>
+                <div class="wp-bar">
+                    <div class="wp-team1" style="width: 62%;"></div>
+                    <div class="wp-team2" style="width: 38%;"></div>
+                </div>
+                <p style="font-size: 0.6rem; color: #64748b; text-align: center; margin-top: 5px;">*Win Predictor updates ball-by-ball</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div style="font-weight: 900; font-size: 0.9rem; color: var(--gold); margin-bottom: 10px;">🏟️ VENUE INSIGHT: CHINNASWAMY</div>
+            <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4;">
+                This venue favors batters. Average 1st innings score: 185. 
+                <strong>Virat Kohli</strong> averages 42.5 at this ground in his last 10 innings.
+            </p>
+        </div>
     </div>
 
-    <div id="live-engine" class="card">
-        <div style="font-size: 0.7rem; color: var(--accent); font-weight: 800; margin-bottom: 10px;">LIVE BALL-BY-BALL</div>
-        <div class="score-row">
-            <div class="team-box">
-                <div class="team-name">RCB</div>
-                <div class="score-val" id="r-score">0/0</div>
-                <div class="overs" id="r-overs">0.0 Overs</div>
+    <div id="p-turf" class="page">
+        <div class="card">
+            <h3 style="text-align: center; margin-bottom: 10px; color: var(--accent);">TURF MATCH SCORER</h3>
+            <div class="scorer-big" id="t-scr">0-0</div>
+            <div style="text-align: center; color: #64748b; font-weight: 700; margin-bottom: 15px;">OVERS: <span id="t-ov">0.0</span></div>
+            <div class="btn-grid">
+                <button class="b-tool" onclick="addT(1)">1</button>
+                <button class="b-tool" onclick="addT(2)">2</button>
+                <button class="b-tool" onclick="addT(3)">3</button>
+                <button class="b-tool" onclick="addT(4)" style="background: var(--accent); color: #000;">4</button>
+                <button class="b-tool" onclick="addT(6)" style="grid-column: span 4; background: var(--green); color: #000;">SIX (6)</button>
+                <button class="b-tool" onclick="takeW()" style="grid-column: span 4; background: var(--red);">WICKET</button>
+                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; font-size: 0.6rem;">RESET MATCH</button>
             </div>
-            <div style="font-weight: 900; color: #1e293b;">VS</div>
-            <div class="team-box">
-                <div class="team-name">LSG</div>
-                <div class="score-val" id="l-score">-</div>
-                <div class="overs" id="l-overs">Yet to bat</div>
-            </div>
-        </div>
-
-        <div class="over-history">
-            <div class="ball">0</div>
-            <div class="ball four">4</div>
-            <div class="ball">1</div>
-            <div class="ball six">6</div>
-            <div class="ball wicket">W</div>
-            <div class="ball">1</div>
-        </div>
-        <div style="margin-top: 20px; font-size: 0.8rem; font-weight: 800; color: var(--gold);">
-            Virat Kohli: 42*(28) • Rajat Patidar: 12(8)
         </div>
     </div>
 
-    <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPL%20Dev&cu=INR&tn=Support" style="text-decoration: none;">
-        <div class="card" style="background: linear-gradient(135deg, #059669, #10b981); border: none;">
-            <div style="font-weight: 900; color: white;">☕ SUPPORT THE DEV</div>
+    <div id="p-stats" class="page">
+        <div class="card">
+            <div style="font-weight: 900; margin-bottom: 15px;">PLAYER VENUE COMPARISON</div>
+            <div class="bar-wrap">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>V. Kohli (At Venue)</span> <span>88% Success</span></div>
+                <div class="bar-fill" style="width: 88%;"></div>
+            </div>
+            <div class="bar-wrap">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>KL Rahul (At Venue)</span> <span>72% Success</span></div>
+                <div class="bar-fill" style="width: 72%; background: var(--gold);"></div>
+            </div>
+            <p style="font-size: 0.7rem; color: #64748b; margin-top: 10px;">Data based on last 5 years at M. Chinnaswamy.</p>
         </div>
-    </a>
+        
+        <div class="card">
+            <div style="font-weight: 900; margin-bottom: 10px;">PAST PERFORMANCE GRAPH</div>
+            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
+                <polyline fill="none" stroke="#38bdf8" stroke-width="2" points="0,60 40,20 80,45 120,10 160,30 200,5" />
+                <circle cx="120" cy="10" r="3" fill="var(--gold)" />
+            </svg>
+            <p style="font-size: 0.6rem; text-align: center; color: #475569;">Season Batting Strike Rate Trend</p>
+        </div>
+    </div>
 
 </div>
 
-<div class="menu-bar">
-    <div class="menu-item active">🏟️<br>LIVE</div>
-    <div class="menu-item">📊<br>STATS</div>
-    <div class="menu-item">👤<br>PROFILE</div>
+<div class="nav-btm">
+    <div class="nav-btn active" onclick="tab('p-live', this)">🏏<br>LIVE</div>
+    <div class="nav-btn" onclick="tab('p-turf', this)">🏟️<br>TURF</div>
+    <div class="nav-btn" onclick="tab('p-stats', this)">📊<br>STATS</div>
 </div>
 
 <script>
-    // MATCH START TIME: April 15, 2026 19:30:00
-    const matchTime = new Date("April 15, 2026 19:30:00").getTime();
+    function tab(id, el) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    /* TURF SCORER LOGIC */
+    let tr=0, tw=0, tb=0;
+    function addT(r){ tr+=r; tb++; updateT(); }
+    function takeW(){ tw++; tb++; updateT(); }
+    function resetT(){ tr=0; tw=0; tb=0; updateT(); }
+    function updateT(){
+        document.getElementById('t-scr').innerText = tr+'-'+tw;
+        document.getElementById('t-ov').innerText = Math.floor(tb/6)+'.'+(tb%6);
+    }
+</script>
+
+</body>
+</html>
