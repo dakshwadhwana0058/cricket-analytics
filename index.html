@@ -3,58 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IPL Master Analytics | RCB vs LSG</title>
     
-    <title>IPL Master Analytics</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
         :root { --bg: #020617; --surface: #1e293b; --accent: #22c55e; --neon: #38bdf8; --gold: #fbbf24; --red: #ef4444; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: #f8fafc; min-height: 100vh; padding-bottom: 50px; }
+        body { background-color: var(--bg); color: #f8fafc; min-height: 100vh; padding-bottom: 30px; }
 
+        /* HEADER */
         nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; }
         .logo { font-weight: 900; font-size: 0.9rem; color: var(--neon); text-transform: uppercase; }
         .logo span { color: #fff; }
 
+        /* CONTAINER */
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        .card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
 
-        /* SCORER INTERFACE */
-        .score-display { text-align: center; margin: 20px 0; }
-        .main-score { font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; }
+        /* SCORE DISPLAYS */
+        .score-display { text-align: center; margin: 10px 0 25px 0; }
+        .main-score { font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; letter-spacing: -2px; }
         .overs-display { color: #94a3b8; font-size: 1.2rem; margin-top: 10px; font-weight: 700; }
 
-        .control-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 15px; }
-        .section-label { grid-column: span 4; font-size: 0.7rem; text-transform: uppercase; color: #64748b; letter-spacing: 1px; margin-bottom: 5px; }
+        /* CONTROLS */
+        .control-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+        .section-label { grid-column: span 4; font-size: 0.7rem; text-transform: uppercase; color: #64748b; letter-spacing: 1.5px; margin-bottom: 5px; font-weight: 700; }
 
-        .btn { border: none; padding: 15px 5px; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .btn { border: none; padding: 18px 5px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 1rem; color: #000; }
         .btn:active { transform: scale(0.92); }
+        
+        .b-runs { background: var(--neon); }
+        .b-boundary { background: var(--accent); }
+        .b-extra { background: #475569; color: white; font-size: 0.8rem; }
+        .b-out { background: var(--red); color: white; grid-column: span 4; padding: 20px; font-size: 1.2rem; margin-top: 5px; }
 
-        /* Scoring Colors */
-        .b-runs { background: var(--neon); color: #000; }
-        .b-boundary { background: var(--accent); color: #000; }
-        .b-extra { background: #64748b; color: white; }
-        .b-out { background: var(--red); color: white; grid-column: span 4; padding: 20px; font-size: 1.2rem; }
+        input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; text-align: center; font-weight: 700; font-size: 1rem; }
+        ::placeholder { color: #475569; }
 
-        input { width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.3); color: white; text-align: center; margin-bottom: 10px; }
+        /* MONETIZATION: UPI BUTTON */
+        .support-container { margin-top: 25px; text-align: center; }
+        .support-link { display: inline-block; width: 100%; background: linear-gradient(135deg, #059669, #10b981); color: white; text-decoration: none; padding: 18px; border-radius: 16px; font-weight: 900; font-size: 1rem; box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3); transition: 0.3s; }
+        .support-link:active { transform: scale(0.96); }
+        .support-note { font-size: 0.7rem; color: #64748b; margin-top: 10px; display: block; letter-spacing: 0.5px; }
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">IPL MASTER <span>ANALYTICS</span></div>
-        <div id="vStatus" style="font-size: 0.7rem; color: var(--accent);">● LIVE FEED</div>
+        <div style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">● LIVE RCB v LSG</div>
     </nav>
 
     <div class="container">
         
         <div class="card">
-            <div class="grid-inputs" style="display: flex; gap: 10px;">
-                <input type="number" id="targ" placeholder="TARGET">
-                <input type="number" id="ovr" placeholder="MAX OVERS">
+            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <input type="number" id="targ" placeholder="TARGET RUNS">
+                <input type="number" id="ovr" placeholder="OVERS LIMIT">
             </div>
 
             <div class="score-display">
@@ -63,7 +70,7 @@
             </div>
 
             <div class="control-group">
-                <div class="section-label">Scoring</div>
+                <div class="section-label">Runs</div>
                 <button class="btn b-runs" onclick="addRun(0)">0</button>
                 <button class="btn b-runs" onclick="addRun(1)">1</button>
                 <button class="btn b-runs" onclick="addRun(2)">2</button>
@@ -73,18 +80,25 @@
             </div>
 
             <div class="control-group">
-                <div class="section-label">Extras & Special</div>
-                <button class="btn b-extra" onclick="addExtra('wd')">WD</button>
-                <button class="btn b-extra" onclick="addExtra('nb')">NB</button>
-                <button class="btn b-extra" onclick="addExtra('lb')">LB</button>
-                <button class="btn b-extra" onclick="addExtra('b')">B</button>
+                <div class="section-label">Extras</div>
+                <button class="btn b-extra" onclick="addExtra('wd')">WIDE</button>
+                <button class="btn b-extra" onclick="addExtra('nb')">NO BALL</button>
+                <button class="btn b-extra" onclick="addExtra('lb')">LEG BYE</button>
+                <button class="btn b-extra" onclick="addExtra('b')">BYE</button>
             </div>
 
             <div class="control-group">
                 <button class="btn b-out" onclick="takeWicket()">WICKET (OUT)</button>
             </div>
 
-            <button onclick="resetAll()" style="width:100%; background:none; border:none; color:#475569; font-size:0.7rem; cursor:pointer;">RESET MATCH DATA</button>
+            <div class="support-container">
+                <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPL%20Scorer%20Dev&cu=INR&tn=Support%20Cricket%20Project" class="support-link">
+                    ☕ BUY ME A CHAI (TIP ₹20)
+                </a>
+                <span class="support-note">Secure Payment via GPay, PhonePe, Paytm</span>
+            </div>
+
+            <button onclick="resetAll()" style="width:100%; background:none; border:none; color:#475569; font-size:0.7rem; cursor:pointer; margin-top: 25px; text-decoration: underline;">RESET MATCH</button>
         </div>
 
     </div>
@@ -103,18 +117,18 @@
             runs += r;
             balls++;
             updateDisplay();
-            checkTarget();
+            checkVictory();
         }
 
         function addExtra(type) {
             if (type === 'wd' || type === 'nb') {
                 runs += 1; // 1 run for the extra, ball not counted
             } else {
-                // Leg Byes or Byes count as balls
                 runs += 1; 
-                balls++;
+                balls++; // Leg Byes count as balls
             }
             updateDisplay();
+            checkVictory();
         }
 
         function takeWicket() {
@@ -123,19 +137,19 @@
                 balls++;
                 updateDisplay();
             }
-            if (wickets === 10) alert("All Out!");
+            if (wickets === 10) alert("Team All Out!");
         }
 
-        function checkTarget() {
+        function checkVictory() {
             const target = parseInt(document.getElementById('targ').value);
             if (target && runs >= target) {
-                confetti();
-                alert("Match Won!");
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                setTimeout(() => alert("Victory! Target Achieved."), 500);
             }
         }
 
         function resetAll() {
-            if(confirm("Start new match?")) {
+            if(confirm("Are you sure you want to reset the scorecard?")) {
                 runs = 0; wickets = 0; balls = 0;
                 updateDisplay();
             }
