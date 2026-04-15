@@ -7,7 +7,6 @@
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="CricketPro">
     <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5351/5351486.png">
 
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
@@ -17,7 +16,7 @@
         :root { 
             --bg: #020617;
             --surface: #1e293b;
-            --accent: #22c55e; /* Turf Green */
+            --accent: #22c55e;
             --neon: #38bdf8;
             --gold: #fbbf24;
         }
@@ -41,9 +40,7 @@
             justify-content: space-between; 
             align-items: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
         
         .logo { font-weight: 900; letter-spacing: 1px; font-size: 0.8rem; text-transform: uppercase; color: var(--neon); }
@@ -103,7 +100,6 @@
             color: white; padding: 6px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: bold;
         }
 
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .card { background: rgba(255,255,255,0.05); padding: 25px; border-radius: 25px; text-align: center; border: 1px solid rgba(255,255,255,0.05); }
         .card h3 { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
         .card p { font-size: 2.2rem; font-weight: 900; color: white; }
@@ -135,15 +131,15 @@
                 <button class="btn b-dot" onclick="run(0, 'Dot ball')">DOT</button>
                 
                 <button class="btn b-run" onclick="run(1, 'One run')">+1</button>
-                <button class="btn b-4" onclick="run(4, 'Four! Great shot')">4</button>
-                <button class="btn b-6" onclick="run(6, 'Six! That is huge')">6</button>
+                <button class="btn b-4" onclick="run(4, 'Four! Classic shot')">4</button>
+                <button class="btn b-6" onclick="run(6, 'Six! Out of the park')">6</button>
                 
                 <button class="btn b-out" onclick="out()">WICKET</button>
                 <button class="btn" style="grid-column:span 3; background:none; color:#64748b; font-size:0.7rem; box-shadow:none; margin-top:15px;" onclick="res()">RESET MATCH</button>
             </div>
         </section>
 
-        <div class="stats-grid">
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
             <div class="card"><h3>Average</h3><p>38.4</p></div>
             <div class="card"><h3>Strike Rate</h3><p>142.1</p></div>
         </div>
@@ -168,50 +164,61 @@
         function toggle() { 
             let s=document.getElementById('manager').style; 
             s.display=(s.display=='block')?'none':'block'; 
-            if(s.display=='block') speak("Live scorer activated");
         }
 
         function run(n, comment) { 
-            r+=n; b++; upd(); 
-            speak(comment + ". Score is " + r + " for " + w);
+            r+=n; b++; upd(comment); 
         }
 
         function extra(type) { 
-            r+=1; upd(); 
-            speak(type + ". One extra run. Score is " + r);
+            r+=1; upd(type + ", one run added"); 
         }
 
         function out() { 
-            if(w<10)w++; b++; upd(); 
-            speak("Wicket! Out. Score is " + r + " for " + w);
+            if(w<10)w++; b++; upd("Wicket down!"); 
         }
 
-        function upd() {
+        function upd(mainComment = "") {
             document.getElementById('scr').innerText = r+"-"+w;
             document.getElementById('ov').innerText = Math.floor(b/6)+"."+(b%6);
-            let t=parseInt(document.getElementById('targ').value), o=parseInt(document.getElementById('ovr').value), m=document.getElementById('msg');
-            if(t>0 && o>0) {
-                m.style.display='block'; let bl=(o*6)-b, rn=t-r;
-                if(rn<=0) { 
+            
+            let t=parseInt(document.getElementById('targ').value);
+            let o=parseInt(document.getElementById('ovr').value);
+            let m=document.getElementById('msg');
+            let statusText = "";
+
+            if(t > 0 && o > 0) {
+                m.style.display='block';
+                let bl=(o*6)-b;
+                let rn=t-r;
+
+                if(rn <= 0) { 
                     m.innerText="🏆 TARGET ACHIEVED!"; 
                     m.style.background="var(--accent)"; m.style.color="#000";
-                    if(!done){ confetti(); speak("Target achieved! Incredible win!"); done=true; }
-                } else if(bl<=0 || w>=10) { 
+                    statusText = "Target achieved! You have won the match.";
+                    if(!done){ confetti(); done=true; }
+                } else if(bl <= 0 || w >= 10) { 
                     m.innerText="🏁 MATCH OVER"; 
                     m.style.background="#ef4444"; m.style.color="white";
+                    statusText = "Match over.";
                 } else { 
                     m.innerHTML=`${rn} needed in ${bl} balls`;
-                    m.style.color="var(--gold)"; m.style.background="rgba(251,191,36,0.1)";
+                    statusText = rn + " needed in " + bl + " balls.";
                 }
-            } else { m.style.display='none'; }
+            }
+            
+            if(mainComment !== "") {
+                let fullSpeech = mainComment + ". Score is " + r + " for " + w + ". " + statusText;
+                speak(fullSpeech);
+            }
         }
 
         function res() { 
-            if(confirm("Reset match data?")){ 
+            if(confirm("Reset match?")){ 
                 r=0; w=0; b=0; done=false; 
                 document.getElementById('targ').value=''; 
                 document.getElementById('ovr').value=''; 
-                upd(); speak("Match reset");
+                upd(""); speak("Match reset");
             } 
         }
     </script>
