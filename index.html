@@ -2,109 +2,214 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cricket Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Cricket Analytics | Turf Scorer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
+        /* --- STYLING --- */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background-color: #f0f2f5; 
-            color: #1a1a1a;
-            line-height: 1.6;
+            font-family: 'Outfit', sans-serif; 
+            background-color: #f0f4f8; 
+            color: #1a202c;
+            line-height: 1.5;
         }
 
         nav {
-            background: #001f3f;
+            background: #0f172a;
             color: white;
             padding: 1rem;
             text-align: center;
-            font-weight: bold;
+            font-weight: 900;
+            letter-spacing: 1px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
-        .hero {
-            background: #001f3f;
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin: 20px 0 10px 0;
+            color: #334155;
+            text-transform: uppercase;
+        }
+
+        /* Scoreboard Card */
+        .scoreboard-card {
+            background: #0f172a;
             color: white;
-            padding: 40px 20px;
+            padding: 30px 20px;
+            border-radius: 20px;
             text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            margin-bottom: 25px;
+        }
+
+        .score-display {
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #fbbf24;
+            line-height: 1;
+        }
+
+        .overs-display {
+            font-size: 1.2rem;
+            color: #94a3b8;
             margin-bottom: 20px;
         }
 
-        .container { padding: 15px; }
-
-        .stats-grid {
+        /* Buttons */
+        .grid-3 {
             display: grid;
-            grid-template-columns: 1fr; /* Stacks on mobile */
-            gap: 15px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .card {
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        button {
+            border: none;
+            border-radius: 12px;
+            padding: 18px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.1s, opacity 0.2s;
+            color: white;
+        }
+
+        button:active { transform: scale(0.95); }
+
+        .btn-run { background: #38bdf8; color: #0f172a; }
+        .btn-boundary { background: #22c55e; }
+        .btn-six { background: #8b5cf6; }
+        .btn-out { background: #ef4444; }
+        .btn-reset { background: #64748b; }
+
+        /* KPI Section */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .kpi-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
 
-        .card h3 { font-size: 0.9rem; color: #666; margin-bottom: 5px; }
-        .card .value { font-size: 2rem; font-weight: bold; color: #001f3f; }
-        .trend { font-size: 0.8rem; font-weight: bold; }
-        .up { color: green; }
-        .down { color: red; }
+        .kpi-card h4 { font-size: 0.8rem; color: #64748b; }
+        .kpi-card p { font-size: 1.2rem; font-weight: 700; }
 
-        .analysis-box {
-            background: #fff;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 10px;
-            border-left: 5px solid #001f3f;
-        }
+        footer { text-align: center; padding: 30px; color: #94a3b8; font-size: 0.8rem; }
 
-        @media (min-width: 768px) {
-            .stats-grid { grid-template-columns: repeat(3, 1fr); }
-        }
-
-        footer { text-align: center; padding: 20px; font-size: 0.8rem; color: #777; }
     </style>
 </head>
 <body>
 
     <nav>CRICKET ANALYTICS</nav>
 
-    <header class="hero">
-        <h1>Match Insights</h1>
-        <p>Advanced data modeling for cricket fans.</p>
-    </header>
-
     <main class="container">
-        <div class="stats-grid">
-            <div class="card">
-                <h3>Batting SR</h3>
-                <p class="value">145.8</p>
-                <p class="trend up">↑ 5.2%</p>
+        
+        <h2 class="section-title">Live Turf Scorer</h2>
+        
+        <div class="scoreboard-card">
+            <div class="score-display" id="main-score">0 - 0</div>
+            <div class="overs-display">Overs: <span id="overs-count">0.0</span></div>
+            
+            <div class="grid-3">
+                <button class="btn-run" onclick="addBall(1)">+1</button>
+                <button class="btn-boundary" onclick="addBall(4)">4</button>
+                <button class="btn-six" onclick="addBall(6)">6</button>
             </div>
-            <div class="card">
-                <h3>Bowling Avg</h3>
-                <p class="value">22.4</p>
-                <p class="trend down">↓ 1.1%</p>
-            </div>
-            <div class="card">
-                <h3>Win Prob</h3>
-                <p class="value">68%</p>
-                <p class="trend">Stable</p>
+
+            <div class="grid-2">
+                <button class="btn-out" onclick="takeWicket()">WICKET</button>
+                <button class="btn-reset" onclick="resetMatch()">RESET</button>
             </div>
         </div>
 
-        <section class="analysis-box">
-            <h2>Deep Dive Analysis</h2>
-            <p>Our current model predicts a high advantage for spin bowlers in the second innings based on pitch moisture levels.</p>
-        </section>
+        <h2 class="section-title">Match KPI</h2>
+        <div class="kpi-grid">
+            <div class="kpi-card">
+                <h4>Run Rate</h4>
+                <p id="run-rate">0.00</p>
+            </div>
+            <div class="kpi-card">
+                <h4>Projection</h4>
+                <p id="projection">0</p>
+            </div>
+        </div>
+
     </main>
 
     <footer>
-        &copy; 2026 Cricket Analytics Dashboard
+        &copy; 2026 Cricket Analytics Dashboard<br>
+        Designed for Turf Matches
     </footer>
+
+    <script>
+        let runs = 0;
+        let wickets = 0;
+        let totalBalls = 0;
+
+        function addBall(amt) {
+            runs += amt;
+            totalBalls += 1;
+            updateDisplay();
+        }
+
+        function takeWicket() {
+            if (wickets < 10) {
+                wickets++;
+                totalBalls += 1;
+                updateDisplay();
+            } else {
+                alert("Team is All Out!");
+            }
+        }
+
+        function resetMatch() {
+            if (confirm("Reset the match?")) {
+                runs = 0;
+                wickets = 0;
+                totalBalls = 0;
+                updateDisplay();
+            }
+        }
+
+        function updateDisplay() {
+            // Calculate Overs (e.g., 7 balls = 1.1 overs)
+            let completedOvers = Math.floor(totalBalls / 6);
+            let remainingBalls = totalBalls % 6;
+            let overStr = completedOvers + "." + remainingBalls;
+            
+            // Calculate Run Rate
+            let rr = totalBalls > 0 ? (runs / (totalBalls / 6)).toFixed(2) : "0.00";
+            
+            // Calculate Projection (assuming 20 over match)
+            let proj = totalBalls > 0 ? Math.round((runs / totalBalls) * 120) : "0";
+
+            // Update UI
+            document.getElementById('main-score').innerText = runs + " - " + wickets;
+            document.getElementById('overs-count').innerText = overStr;
+            document.getElementById('run-rate').innerText = rr;
+            document.getElementById('projection').innerText = proj;
+        }
+    </script>
 
 </body>
 </html>
