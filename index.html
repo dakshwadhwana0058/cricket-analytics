@@ -3,145 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CricAnalyst Live | RCB vs LSG</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <title>Cricket Pro Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --cb-green: #009270; --cb-dark: #222b39; --cb-bg: #e3e6e8; --cb-white: #ffffff; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
-        body { background: var(--cb-bg); color: #333; }
+        :root { --primary: #1a73e8; --dark: #121212; --card: #1e1e1e; --accent: #00e676; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: var(--dark); color: #fff; }
 
-        /* HEADER CRICBUZZ STYLE */
-        header { background: var(--cb-dark); color: white; padding: 12px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
-        .logo-text { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; color: #fff; }
-        .logo-text span { color: #f0f0f0; font-weight: 400; font-size: 0.8rem; margin-left: 5px; }
+        /* TAB NAVIGATION */
+        .tab-bar { display: flex; background: #1a1a1a; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 15px; text-align: center; font-size: 0.8rem; font-weight: 600; color: #888; cursor: pointer; border-bottom: 3px solid transparent; }
+        .tab.active { color: var(--primary); border-bottom-color: var(--primary); background: rgba(26, 115, 232, 0.05); }
 
-        .match-header { background: #333; color: #fff; padding: 8px 15px; font-size: 0.75rem; font-weight: 500; }
+        .container { padding: 15px; max-width: 500px; margin: 0 auto; display: none; }
+        .container.active { display: block; }
 
-        .container { max-width: 500px; margin: 0 auto; }
+        /* TURF SCORER STYLING */
+        .score-display { background: var(--card); border-radius: 20px; padding: 30px; text-align: center; margin-bottom: 20px; border: 1px solid #333; }
+        .main-num { font-size: 4rem; font-weight: 800; color: var(--accent); }
+        .controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .btn { background: #333; border: none; padding: 15px; border-radius: 12px; color: #fff; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
+        .btn:active { transform: scale(0.9); background: var(--primary); }
+        .btn.wicket { background: #d32f2f; }
 
-        /* MAIN SCORECARD CARD */
-        .cb-card { background: var(--cb-white); margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-        .score-row { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
-        .team-info { display: flex; align-items: center; gap: 10px; }
-        .team-name { font-weight: 700; font-size: 1.1rem; }
-        .live-score { font-size: 1.5rem; font-weight: 900; color: #000; }
-        .overs-text { font-size: 0.85rem; color: #666; font-weight: 400; margin-left: 5px; }
+        /* IPL SECTION STYLING */
+        .match-card { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 15px; position: relative; overflow: hidden; }
+        .match-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--primary); }
+        .team-row { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; }
+        .team-name { font-weight: 600; font-size: 0.95rem; }
+        .team-score { font-weight: 800; font-size: 1.1rem; }
+        .status { font-size: 0.7rem; color: #00e676; font-weight: 600; margin-top: 10px; }
 
-        /* BATSMAN & BOWLER TABLE */
-        .stats-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        .stats-table th { background: #f9f9f9; text-align: left; padding: 8px 15px; color: #666; font-weight: 500; border-bottom: 1px solid #eee; }
-        .stats-table td { padding: 10px 15px; border-bottom: 1px solid #f1f1f1; }
-        .is-on-strike::after { content: '*'; color: var(--cb-green); font-weight: 900; margin-left: 3px; }
-
-        /* OVER SUMMARY (BALLS) */
-        .over-summary { padding: 12px 15px; display: flex; align-items: center; gap: 8px; overflow-x: auto; background: #fff; }
-        .ball { width: 26px; height: 26px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #444; flex-shrink: 0; }
-        .ball.four { background: #1976d2; color: white; }
-        .ball.six { background: #6a1b9a; color: white; }
-        .ball.wicket { background: #d32f2f; color: white; }
-
-        /* UPI ADS SECTION */
-        .ad-banner { background: #fff9c4; padding: 15px; text-align: center; border-top: 2px solid #fbc02d; }
-        .pay-btn { background: var(--cb-green); color: white; display: block; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: 700; margin-top: 8px; }
+        /* UPI FLOATING BUTTON */
+        .upi-float { background: #fbbf24; color: #000; padding: 12px; border-radius: 50px; text-align: center; font-weight: 800; font-size: 0.8rem; text-decoration: none; display: block; margin-top: 20px; box-shadow: 0 5px 15px rgba(251, 191, 36, 0.4); }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo-text">CricAnalyst <span>RCB vs LSG</span></div>
-</header>
+<div class="tab-bar">
+    <div class="tab active" onclick="openTab('turf', this)">TURF SCORER</div>
+    <div class="tab" onclick="openTab('ipl', this)">IPL LIVE</div>
+    <div class="tab" onclick="openTab('expert', this)">EXPERT TIPS</div>
+</div>
 
-<div class="match-header">Royal Challengers Bengaluru vs Lucknow Super Giants, 15th Match</div>
+<div id="turf" class="container active">
+    <div class="score-display">
+        <div style="font-size: 0.8rem; color: #888; margin-bottom: 10px;">LOCAL MATCH SCORE</div>
+        <div class="main-num" id="t-score">0 / 0</div>
+        <div style="font-size: 1.1rem; color: #888;">Over <span id="t-over">0.0</span></div>
+    </div>
+    <div class="controls">
+        <button class="btn" onclick="addRun(0)">0</button>
+        <button class="btn" onclick="addRun(1)">1</button>
+        <button class="btn" onclick="addRun(2)">2</button>
+        <button class="btn" onclick="addRun(3)">3</button>
+        <button class="btn" onclick="addRun(4)" style="color:var(--primary)">4</button>
+        <button class="btn" onclick="addRun(6)" style="color:var(--accent)">6</button>
+        <button class="btn wicket" onclick="addWicket()">W</button>
+        <button class="btn" onclick="resetScore()" style="font-size: 0.7rem; background:#444">RESET</button>
+    </div>
+</div>
 
-<div class="container">
-    
-    <div class="cb-card">
-        <div class="score-row">
-            <div class="team-info">
-                <span class="team-name" style="color:#d32f2f">RCB</span>
-                <span class="live-score">24/1 <span class="overs-text">(2.4)</span></span>
-            </div>
-            <div style="text-align: right;">
-                <div style="font-size: 0.7rem; color: #d32f2f; font-weight: 900;">LIVE</div>
-                <div style="font-size: 0.75rem; color: #666;">CRR: 9.00</div>
-            </div>
+<div id="ipl" class="container">
+    <div class="match-card">
+        <div style="font-size: 0.65rem; color: #888; margin-bottom: 10px;">IPL 2024 - M.CHINNASWAMY STADIUM</div>
+        <div class="team-row">
+            <span class="team-name">LSG</span>
+            <span class="team-score">181/5 (20)</span>
         </div>
-
-        <table class="stats-table">
-            <tr>
-                <th>Batter</th>
-                <th>R</th>
-                <th>B</th>
-                <th>4s</th>
-                <th>6s</th>
-                <th>SR</th>
-            </tr>
-            <tr>
-                <td class="is-on-strike">Virat Kohli</td>
-                <td>12</td>
-                <td>8</td>
-                <td>2</td>
-                <td>0</td>
-                <td>150.0</td>
-            </tr>
-            <tr>
-                <td>Faf du Plessis</td>
-                <td>8</td>
-                <td>6</td>
-                <td>1</td>
-                <td>0</td>
-                <td>133.3</td>
-            </tr>
-        </table>
-
-        <table class="stats-table">
-            <tr>
-                <th>Bowler</th>
-                <th>O</th>
-                <th>M</th>
-                <th>R</th>
-                <th>W</th>
-                <th>ECO</th>
-            </tr>
-            <tr>
-                <td>M Siddharth</td>
-                <td>1.4</td>
-                <td>0</td>
-                <td>14</td>
-                <td>1</td>
-                <td>8.4</td>
-            </tr>
-        </table>
-    </div>
-
-    <div class="cb-card" style="padding: 10px 0;">
-        <div style="padding: 0 15px; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">RECENT BALLS</div>
-        <div class="over-summary">
-            <div class="ball">1</div>
-            <div class="ball four">4</div>
-            <div class="ball">0</div>
-            <div class="ball wicket">W</div>
-            <div class="ball">.</div>
-            <div class="ball six">6</div>
-            <div style="color: #999; font-size: 0.8rem; margin-left: 10px;">| Over 2</div>
+        <div class="team-row">
+            <span class="team-name" style="color: #ef4444;">RCB</span>
+            <span class="team-score">28/1 (3.1)</span>
         </div>
+        <div class="status">● RCB needs 154 runs in 101 balls</div>
     </div>
 
-    <div class="cb-card ad-banner">
-        <div style="font-size: 0.85rem; font-weight: 700;">PRO TIP: Digvesh Rathee vs Kohli Battle?</div>
-        <div style="font-size: 0.75rem; color: #555;">Get the exact ball when Kohli might struggle!</div>
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="pay-btn">BUY PREDICTION ₹10</a>
+    <div class="match-card" style="opacity: 0.6;">
+        <div style="font-size: 0.65rem; color: #888; margin-bottom: 10px;">UPCOMING MATCH</div>
+        <div class="team-row"><span class="team-name">MI</span><span class="team-score">VS</span></div>
+        <div class="team-row"><span class="team-name">DC</span><span class="team-score"></span></div>
+        <div class="status" style="color: #888;">Tomorrow 7:30 PM</div>
     </div>
+</div>
 
+<div id="expert" class="container">
+    <div class="match-card" style="background: linear-gradient(135deg, #1e1e1e, #111);">
+        <h3 style="color: #fbbf24; margin-bottom: 10px;">Premium Analysis</h3>
+        <p style="font-size: 0.85rem; color: #bbb; line-height: 1.5;">Get the winning prediction for RCB vs LSG. Analysis by Team Analyst Pro.</p>
+        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-float">UNLOCK EXPERT TEAM ₹10</a>
+    </div>
 </div>
 
 <script>
-    // Fake Live Visitor Counter
-    let visitors = 342;
-    setInterval(() => {
-        visitors += Math.floor(Math.random() * 5) - 2;
-        console.log("Live Visitors: " + visitors);
-    }, 3000);
+    // Tab System
+    function openTab(tabId, el) {
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        el.classList.add('active');
+    }
+
+    // Turf Scorer Logic
+    let score = 0, wickets = 0, balls = 0;
+    function addRun(runs) {
+        score += runs;
+        balls++;
+        updateDisplay();
+    }
+    function addWicket() {
+        if(wickets < 10) wickets++;
+        balls++;
+        updateDisplay();
+    }
+    function resetScore() {
+        score = 0; wickets = 0; balls = 0;
+        updateDisplay();
+    }
+    function updateDisplay() {
+        let overs = Math.floor(balls/6) + "." + (balls%6);
+        document.getElementById('t-score').innerText = `${score} / ${wickets}`;
+        document.getElementById('t-over').innerText = overs;
+    }
 </script>
 
 </body>
