@@ -3,91 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Analyst Pro</title>
+    <title>IPL Analyst Pro | Monetized</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; --green: #22c55e; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; padding-bottom: 100px; }
+        body { background: var(--bg); color: #fff; padding-bottom: 100px; overflow-x: hidden; }
 
-        header { padding: 15px; background: rgba(15,23,42,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-        
-        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-btn { color: #64748b; font-size: 0.7rem; font-weight: 800; text-align: center; cursor: pointer; }
-        .nav-btn.active { color: var(--accent); }
+        /* HEADER */
+        header { padding: 15px; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        .logo { font-weight: 900; color: var(--accent); letter-spacing: 1px; }
 
+        /* NAVIGATION BAR */
+        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; z-index: 1000; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
+        .nav-btn { color: #64748b; font-size: 0.7rem; font-weight: 800; text-align: center; cursor: pointer; transition: 0.3s; }
+        .nav-btn.active { color: var(--accent); transform: translateY(-3px); }
+
+        /* CONTAINER & PAGES */
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page { display: none; animation: slideUp 0.4s ease; }
         .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card { background: var(--card); border-radius: 20px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        /* CARDS & UI */
+        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
         
-        /* TEAM INPUTS FOR TURF */
-        .turf-header { display: flex; gap: 10px; margin-bottom: 15px; }
-        .t-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; padding: 8px; color: white; text-align: center; font-weight: 700; font-size: 0.8rem; }
-        
-        .scorer-big { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--gold); margin: 10px 0; }
-        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .b-tool { border: none; padding: 15px; border-radius: 12px; font-weight: 800; background: #334155; color: white; }
+        /* MONETIZATION: AFFILIATE BANNER */
+        .affiliate-banner { background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; border: 1px solid rgba(255,255,255,0.2); }
+        .aff-title { font-weight: 900; font-size: 0.9rem; color: #fff; display: block; }
+        .aff-btn { background: #fff; color: #6366f1; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 0.75rem; display: inline-block; margin-top: 10px; }
 
-        /* WIN PREDICTOR */
-        .wp-bar { height: 12px; background: #334155; border-radius: 6px; display: flex; overflow: hidden; margin-top: 8px; }
+        /* LIVE SCORE UI */
+        .score-val { font-size: 2rem; font-weight: 900; color: var(--gold); }
+        .wp-bar { height: 10px; background: #334155; border-radius: 5px; display: flex; overflow: hidden; margin: 10px 0; }
+        
+        /* TURF SCORER */
+        .t-input { width: 45%; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; padding: 8px; color: white; text-align: center; font-weight: 700; }
+        .scorer-big { font-size: 4rem; font-weight: 900; text-align: center; color: var(--gold); margin: 10px 0; }
+        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .b-tool { border: none; padding: 18px; border-radius: 12px; font-weight: 900; background: #334155; color: white; transition: 0.1s; }
+        .b-tool:active { transform: scale(0.95); background: #475569; }
+
+        /* ANALYSIS GRAPHS */
+        .bar-wrap { margin-bottom: 15px; }
+        .bar-bg { height: 8px; background: #1e293b; border-radius: 4px; margin-top: 5px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: 1s ease-out; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-weight: 900; color: var(--accent);">IPL ANALYST 2026</div>
-    <div style="font-size: 0.7rem; color: var(--red); font-weight: 800;">● PRE-MATCH</div>
+    <div class="logo">IPL ANALYST 2026</div>
+    <div style="font-size: 0.7rem; color: var(--red); font-weight: 900; background: rgba(239, 68, 68, 0.1); padding: 2px 8px; border-radius: 5px;">● PRE-MATCH</div>
 </header>
 
 <div class="container">
 
+    <div class="affiliate-banner">
+        <span class="aff-title">🏏 GET EXPERT DREAM11 TEAMS</span>
+        <a href="https://t.me/your_channel" class="aff-btn">JOIN TELEGRAM</a>
+    </div>
+
     <div id="p-live" class="page active">
         <div class="card">
             <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 800; color: var(--accent);">
-                <span>MATCH 23 • BENGALURU</span>
-                <span style="color:#94a3b8">STARTING @ 7:30 PM</span>
+                <span>MATCH 23 • CHINNASWAMY</span>
+                <span id="match-timer">7:30 PM START</span>
             </div>
+            
             <div style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0;">
                 <div style="text-align: center;">
                     <div style="font-size: 1.2rem; font-weight: 900;">RCB</div>
-                    <div style="color: #475569; font-size: 1.5rem; font-weight: 900;">0/0</div>
+                    <div class="score-val">0/0</div>
+                    <div style="font-size: 0.7rem; color: #64748b;">(0.0)</div>
                 </div>
-                <div style="font-weight: 900; color: #1e293b;">VS</div>
+                <div style="font-weight: 900; color: #1e293b; font-size: 1.5rem;">VS</div>
                 <div style="text-align: center;">
                     <div style="font-size: 1.2rem; font-weight: 900;">LSG</div>
-                    <div style="color: #475569; font-size: 1.5rem; font-weight: 900;">0/0</div>
+                    <div class="score-val">0/0</div>
+                    <div style="font-size: 0.7rem; color: #64748b;">(0.0)</div>
                 </div>
             </div>
-            
-            <div style="text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--gold);">
-                Win Predictor: Waiting for Toss...
+
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 900;">
+                <span>RCB (62%)</span>
+                <span>LSG (38%)</span>
             </div>
             <div class="wp-bar">
-                <div style="width: 50%; background: #334155; border-right: 1px solid #0f172a;"></div>
-                <div style="width: 50%; background: #334155;"></div>
+                <div style="width: 62%; background: var(--red);"></div>
+                <div style="width: 38%; background: var(--accent);"></div>
             </div>
+            <p style="text-align: center; font-size: 0.6rem; color: #64748b; margin-top: 5px;">WIN PREDICTOR: FAVORING HOME TEAM</p>
         </div>
 
-        <div class="card" style="border-left: 4px solid var(--accent);">
-            <div style="font-weight: 900; font-size: 0.9rem; color: var(--accent);">TOSS UPDATE</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">Toss will take place at 7:00 PM IST.</p>
+        <div class="card" style="border-left: 4px solid var(--gold);">
+            <div style="font-weight: 900; font-size: 0.85rem; color: var(--gold);">LIVE COMMENTARY</div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 8px; line-height: 1.4;">
+                Crowd is building up at the Chinnaswamy! <strong>Virat Kohli</strong> needs 2 sixes to reach 300 IPL sixes tonight. 
+            </p>
         </div>
     </div>
 
     <div id="p-turf" class="page">
         <div class="card">
-            <div class="turf-header">
-                <input type="text" class="t-input" placeholder="TEAM A NAME">
-                <div style="align-self: center; font-weight: 900; font-size: 0.7rem;">VS</div>
-                <input type="text" class="t-input" placeholder="TEAM B NAME">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                <input type="text" class="t-input" placeholder="TEAM A">
+                <input type="text" class="t-input" placeholder="TEAM B">
             </div>
             
             <div class="scorer-big" id="t-scr">0-0</div>
-            <div style="text-align: center; color: #64748b; font-weight: 700; margin-bottom: 20px;">OVERS: <span id="t-ov">0.0</span></div>
+            <div style="text-align: center; color: #64748b; font-weight: 800; margin-bottom: 20px;">OVERS: <span id="t-ov">0.0</span></div>
             
             <div class="btn-grid">
                 <button class="b-tool" onclick="addT(1)">1</button>
@@ -96,51 +122,69 @@
                 <button class="b-tool" onclick="addT(4)" style="background: var(--accent); color: #000;">4</button>
                 <button class="b-tool" onclick="addT(6)" style="grid-column: span 4; background: var(--green); color: #000;">SIX (6)</button>
                 <button class="b-tool" onclick="takeW()" style="grid-column: span 4; background: var(--red);">WICKET (OUT)</button>
-                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; font-size: 0.6rem; background: #1e293b; color: #64748b; margin-top: 10px;">RESET LOCAL MATCH</button>
+                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; font-size: 0.6rem; margin-top: 10px; background: transparent; border: 1px solid #334155; color: #64748b;">RESET TURF MATCH</button>
             </div>
         </div>
     </div>
 
     <div id="p-stats" class="page">
         <div class="card">
-            <div style="font-weight: 900; margin-bottom: 10px;">PLAYER VS VENUE PERFORMANCE</div>
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;"><span>Virat Kohli (M. Chinnaswamy)</span> <span>High</span></div>
-                    <div style="height: 6px; background: #334155; border-radius: 3px; margin-top: 5px;"><div style="width: 92%; height: 100%; background: var(--accent); border-radius: 3px;"></div></div>
-                </div>
-                <div>
-                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;"><span>KL Rahul (M. Chinnaswamy)</span> <span>Medium</span></div>
-                    <div style="height: 6px; background: #334155; border-radius: 3px; margin-top: 5px;"><div style="width: 65%; height: 100%; background: var(--gold); border-radius: 3px;"></div></div>
-                </div>
+            <div style="font-weight: 900; font-size: 0.9rem; margin-bottom: 15px;">VENUE PERFORMANCE (CHINNASWAMY)</div>
+            
+            <div class="bar-wrap">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Virat Kohli (Strike Rate)</span> <span>154.2</span></div>
+                <div class="bar-bg"><div class="bar-fill" style="width: 85%;"></div></div>
             </div>
+
+            <div class="bar-wrap">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Rajat Patidar (Strike Rate)</span> <span>162.8</span></div>
+                <div class="bar-bg"><div class="bar-fill" style="width: 90%; background: var(--green);"></div></div>
+            </div>
+
+            <div class="bar-wrap">
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>Mohammed Shami (Economy)</span> <span>6.1</span></div>
+                <div class="bar-bg"><div class="bar-fill" style="width: 40%; background: var(--red);"></div></div>
+            </div>
+            <p style="font-size: 0.65rem; color: #475569; text-align: center;">*Analysis based on IPL 2026 Season Data</p>
+        </div>
+
+        <div class="card">
+            <div style="font-weight: 900; font-size: 0.9rem; margin-bottom: 10px;">TEAM MOMENTUM (Last 5 Games)</div>
+            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
+                <polyline fill="none" stroke="#38bdf8" stroke-width="3" points="0,70 30,20 60,45 90,15 120,50 150,25 200,5" />
+                <circle cx="200" cy="5" r="4" fill="var(--gold)" />
+            </svg>
         </div>
     </div>
+
+    <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPL%20Analyst&cu=INR" style="text-decoration: none;">
+        <div class="card" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); border: none; text-align: center; font-weight: 900; color: #000;">
+            ☕ BUY THE DEVELOPER A CHAI
+        </div>
+    </a>
 
 </div>
 
 <div class="nav-btm">
-    <div class="nav-btn active" onclick="tab('p-live', this)">🏏<br>IPL LIVE</div>
-    <div class="nav-btn" onclick="tab('p-turf', this)">🏟️<br>TURF</div>
+    <div class="nav-btn active" onclick="tab('p-live', this)">🏟️<br>LIVE</div>
+    <div class="nav-btn" onclick="tab('p-turf', this)">🏏<br>TURF</div>
     <div class="nav-btn" onclick="tab('p-stats', this)">📊<br>ANALYSIS</div>
 </div>
 
 <script>
+    // Tab Switching
     function tab(id, el) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         el.classList.add('active');
+        window.scrollTo(0,0);
     }
 
+    // Turf Scorer Logic
     let tr=0, tw=0, tb=0;
     function addT(r){ tr+=r; tb++; updateT(); }
-    function takeW(){ tw++; tb++; updateT(); }
-    function resetT(){ if(confirm("Reset Turf Match?")){ tr=0; tw=0; tb=0; updateT(); } }
+    function takeW(){ if(tw<10){ tw++; tb++; updateT(); } }
+    function resetT(){ if(confirm("Clear local match score?")){ tr=0; tw=0; tb=0; updateT(); } }
     function updateT(){
-        document.getElementById('t-scr').innerText = tr+'-'+tw;
-        document.getElementById('t-ov').innerText = Math.floor(tb/6)+'.'+(tb%6);
-    }
-</script>
-</body>
-</html>
+        document.getElementById('t-scr').innerText
