@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cricket Analytics & Turf Pro</title>
+    <title>Cricket Lab | Turf Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <style>
         :root {
             --primary: #0f172a;
@@ -14,7 +16,7 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: #f1f5f9; color: var(--text-main); }
+        body { background: #f1f5f9; color: var(--text-main); overflow-x: hidden; }
 
         nav {
             background: var(--primary);
@@ -35,50 +37,69 @@
             color: white; padding: 15px; text-align: center; font-weight: bold;
             cursor: pointer; margin: 10px; border-radius: 12px;
             box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         .container { padding: 15px; max-width: 800px; margin: 0 auto; }
 
-        /* Turf Manager Section */
+        /* Turf Manager */
         #turf-manager {
             display: none;
             background: var(--primary);
-            color: white; padding: 20px; border-radius: 20px; margin-bottom: 25px;
+            color: white; padding: 20px; border-radius: 24px; margin-bottom: 25px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
         }
 
-        .score-display { font-size: 4rem; font-weight: 900; color: #fbbf24; text-align: center; }
+        .score-display { font-size: 4.5rem; font-weight: 900; color: #fbbf24; text-align: center; line-height: 1; margin: 10px 0; }
         
-        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
-        input { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #1e293b; color: white; font-size: 0.9rem; }
-        
-        .turf-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
-        .turf-btn { border: none; padding: 18px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 1.1rem; }
-        .btn-blue { background: var(--accent); color: var(--primary); }
-        .btn-red { background: #ef4444; color: white; grid-column: span 2; }
+        .setup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        input { 
+            width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #334155; 
+            background: #1e293b; color: white; font-size: 0.9rem; outline: none;
+        }
+        input:focus { border-color: var(--accent); }
 
-        /* Chasing Logic Box */
+        .turf-controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+        .turf-btn { border: none; padding: 20px; border-radius: 15px; font-weight: 800; cursor: pointer; font-size: 1.2rem; transition: 0.1s; }
+        .turf-btn:active { transform: scale(0.9); }
+        
+        .btn-blue { background: var(--accent); color: var(--primary); }
+        .btn-green { background: #22c55e; color: white; }
+        .btn-purple { background: #8b5cf6; color: white; }
+        .btn-red { background: #ef4444; color: white; grid-column: span 3; }
+
         .chase-box {
             background: rgba(251, 191, 36, 0.1);
-            border: 1px dashed #fbbf24;
-            padding: 15px; border-radius: 12px; margin-top: 15px;
+            border: 2px dashed #fbbf24;
+            padding: 15px; border-radius: 15px; margin-top: 20px;
             text-align: center; color: #fbbf24; font-weight: 700;
+            transition: all 0.5s ease;
         }
 
         /* Analytics Section */
-        .section-title { font-size: 1.1rem; font-weight: 700; margin: 20px 0 10px; text-transform: uppercase; color: #64748b; }
+        .section-title { font-size: 1rem; font-weight: 800; margin: 25px 0 12px; text-transform: uppercase; color: #64748b; letter-spacing: 1px; }
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .stat-card p { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+        .stat-card { background: white; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .stat-card h3 { font-size: 0.75rem; color: #94a3b8; text-transform: uppercase; margin-bottom: 8px; }
+        .stat-card p { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
+
     </style>
 </head>
 <body>
 
     <nav>
         <div class="logo">CRICKET<span>LAB</span></div>
+        <div style="font-size: 0.7rem; opacity: 0.6;">PRO EDITION</div>
     </nav>
 
     <div class="match-day-banner" onclick="toggleTurf()">
-        ⚡ LIVE MATCH SCORER MODE
+        🏏 START LIVE TURF SCORING
     </div>
 
     <div class="container">
@@ -86,41 +107,42 @@
         <section id="turf-manager">
             <div class="setup-grid">
                 <div>
-                    <label style="font-size: 0.7rem; color: #94a3b8;">MATCH OVERS</label>
-                    <input type="number" id="match-overs" placeholder="Ex: 6" oninput="updateScorer()">
+                    <label style="font-size: 0.65rem; color: #94a3b8; display: block; margin-bottom: 4px;">TARGET</label>
+                    <input type="number" id="target-input" placeholder="Score" oninput="updateScorer()">
                 </div>
                 <div>
-                    <label style="font-size: 0.7rem; color: #94a3b8;">TARGET SCORE</label>
-                    <input type="number" id="target-input" placeholder="Ex: 50" oninput="updateScorer()">
+                    <label style="font-size: 0.65rem; color: #94a3b8; display: block; margin-bottom: 4px;">TOTAL OVERS</label>
+                    <input type="number" id="match-overs" placeholder="Overs" oninput="updateScorer()">
                 </div>
             </div>
             
             <div class="score-display" id="main-score">0 - 0</div>
-            <p style="text-align: center; color: #94a3b8;">Overs: <span id="overs">0.0</span></p>
+            <p style="text-align: center; color: #94a3b8; font-weight: bold; letter-spacing: 2px;">OVERS: <span id="overs">0.0</span></p>
 
             <div id="chase-logic" class="chase-box" style="display: none;">
-                <span id="runs-needed">0</span> runs needed in <span id="balls-left">0</span> balls
+                <span id="chase-text"><span id="runs-needed">0</span> runs needed in <span id="balls-left">0</span> balls</span>
             </div>
 
             <div class="turf-controls">
                 <button class="turf-btn btn-blue" onclick="add(1)">+1</button>
-                <button class="turf-btn btn-blue" onclick="add(4)">4</button>
-                <button class="turf-btn btn-blue" onclick="add(6)">6</button>
+                <button class="turf-btn btn-green" onclick="add(4)">4</button>
+                <button class="turf-btn btn-purple" onclick="add(6)">6</button>
                 <button class="turf-btn btn-red" onclick="wicket()">WICKET</button>
-                <button class="turf-btn" style="background: #444; color: white;" onclick="resetMatch()">RESET</button>
+                <button class="turf-btn" style="background: #334155; color: white; grid-column: span 3; padding: 10px; font-size: 0.8rem;" onclick="resetMatch()">RESET MATCH</button>
             </div>
         </section>
 
-        <h2 class="section-title">Career Analytics</h2>
+        <h2 class="section-title">Performance Stats</h2>
         <div class="stats-grid">
-            <div class="stat-card"><h3>Batting Avg</h3><p>38.4</p></div>
-            <div class="stat-card"><h3>Strike Rate</h3><p>142.1</p></div>
+            <div class="stat-card"><h3>Avg</h3><p>38.4</p></div>
+            <div class="stat-card"><h3>S/R</h3><p>142.1</p></div>
         </div>
 
     </div>
 
     <script>
         let runs = 0, wickets = 0, balls = 0;
+        let celebrated = false;
 
         function toggleTurf() {
             const section = document.getElementById('turf-manager');
@@ -130,31 +152,52 @@
         function add(r) { runs += r; balls++; updateScorer(); }
         function wicket() { if(wickets < 10) wickets++; balls++; updateScorer(); }
 
+        function celebrate() {
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#38bdf8', '#fbbf24', '#22c55e']
+            });
+        }
+
         function updateScorer() {
-            // Basic Score
             document.getElementById('main-score').innerText = runs + " - " + wickets;
             document.getElementById('overs').innerText = Math.floor(balls/6) + "." + (balls%6);
             
-            // Chase Logic
             let target = parseInt(document.getElementById('target-input').value);
             let totalOvers = parseInt(document.getElementById('match-overs').value);
             let chaseBox = document.getElementById('chase-logic');
 
             if (target > 0 && totalOvers > 0) {
                 chaseBox.style.display = 'block';
-                
                 let totalBallsInMatch = totalOvers * 6;
                 let ballsRemaining = totalBallsInMatch - balls;
                 let runsNeeded = target - runs;
 
-                document.getElementById('runs-needed').innerText = runsNeeded;
-                document.getElementById('balls-left').innerText = ballsRemaining;
-
-                // Color change if it gets tight
-                if (runsNeeded > ballsRemaining) {
-                    chaseBox.style.color = "#ef4444"; // Red if target is hard
+                if (runsNeeded <= 0) {
+                    document.getElementById('chase-text').innerText = "🏆 TARGET ACHIEVED! YOU WIN!";
+                    chaseBox.style.background = "#22c55e";
+                    chaseBox.style.color = "white";
+                    chaseBox.style.border = "none";
+                    if (!celebrated) {
+                        celebrate();
+                        celebrated = true;
+                    }
+                } else if (ballsRemaining <= 0 || wickets >= 10) {
+                    document.getElementById('chase-text').innerText = "🏁 MATCH OVER";
+                    chaseBox.style.background = "#ef4444";
+                    chaseBox.style.color = "white";
                 } else {
-                    chaseBox.style.color = "#fbbf24"; // Yellow otherwise
+                    document.getElementById('chase-text').innerHTML = `<span id="runs-needed">${runsNeeded}</span> runs needed in <span id="balls-left">${ballsRemaining}</span> balls`;
+                    // Color coding
+                    if (runsNeeded > ballsRemaining) {
+                        chaseBox.style.color = "#ef4444";
+                        chaseBox.style.borderColor = "#ef4444";
+                    } else {
+                        chaseBox.style.color = "#fbbf24";
+                        chaseBox.style.borderColor = "#fbbf24";
+                    }
                 }
             } else {
                 chaseBox.style.display = 'none';
@@ -162,8 +205,8 @@
         }
 
         function resetMatch() {
-            if(confirm("Reset live match?")) {
-                runs = 0; wickets = 0; balls = 0;
+            if(confirm("Start new match?")) {
+                runs = 0; wickets = 0; balls = 0; celebrated = false;
                 document.getElementById('target-input').value = '';
                 document.getElementById('match-overs').value = '';
                 updateScorer();
