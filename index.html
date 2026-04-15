@@ -3,165 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL 2026 | Analyst Hub</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;900&display=swap" rel="stylesheet">
+    <title>Turf & IPL Pro Scorer 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #2563eb; --dark: #020617; --card: #0f172a; --accent: #22c55e; --gold: #f59e0b; }
+        :root { --primary: #6366f1; --dark: #020617; --card: #0f172a; --accent: #10b981; --red: #ef4444; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--dark); color: #f8fafc; line-height: 1.6; }
+        body { background: var(--dark); color: #f8fafc; }
 
-        /* NEON HEADER */
-        header { 
-            padding: 20px; 
-            background: rgba(15, 23, 42, 0.9); 
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-            position: sticky; top: 0; z-index: 1000;
-        }
-        .live-pulse {
-            display: inline-block; width: 8px; height: 8px; background: #ef4444;
-            border-radius: 50%; margin-right: 8px; box-shadow: 0 0 10px #ef4444;
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        /* TAB SYSTEM */
+        .tab-bar { display: flex; background: #111; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #333; }
+        .tab { flex: 1; padding: 15px; text-align: center; font-size: 0.8rem; font-weight: 700; color: #555; cursor: pointer; }
+        .tab.active { color: var(--primary); border-bottom: 3px solid var(--primary); }
 
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
+        .container { padding: 15px; max-width: 500px; margin: 0 auto; display: none; }
+        .container.active { display: block; }
 
-        /* 2026 SCORECARD STYLE */
-        .match-card {
-            background: var(--card); border-radius: 24px; padding: 25px;
-            border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
-        }
-        .result-badge {
-            background: rgba(34, 197, 94, 0.1); color: var(--accent);
-            padding: 4px 12px; border-radius: 100px; font-size: 0.7rem;
-            font-weight: 800; text-transform: uppercase; letter-spacing: 1px;
-        }
+        /* TURF SCORER STYLING */
+        .turf-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; background: var(--card); padding: 10px; border-radius: 12px; }
+        .team-btn { padding: 8px 15px; border-radius: 8px; border: none; font-weight: 700; background: #1e293b; color: #fff; opacity: 0.5; }
+        .team-btn.active { opacity: 1; background: var(--primary); }
 
-        .team-row { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-        .team-name { font-size: 1.3rem; font-weight: 900; }
-        .score-val { font-size: 1.5rem; font-weight: 900; color: var(--gold); }
+        .score-board { background: linear-gradient(180deg, #1e293b, #0f172a); border-radius: 24px; padding: 30px; text-align: center; margin-bottom: 20px; border: 1px solid #334155; }
+        .score-val { font-size: 4rem; font-weight: 900; color: var(--accent); line-height: 1; }
+        
+        .grid-ctrl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .btn { padding: 18px; border-radius: 12px; border: none; font-weight: 800; font-size: 1.1rem; cursor: pointer; background: #1e293b; color: #fff; }
+        .btn:active { transform: scale(0.9); }
+        .btn.special { background: #334155; color: var(--primary); font-size: 0.8rem; }
+        .btn.wicket { background: var(--red); }
+        .btn.extra { background: #4f46e5; font-size: 0.8rem; }
 
-        /* ANALYST INSIGHT BOX */
-        .insight-box {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            border-radius: 18px; padding: 20px; margin-bottom: 20px;
-            border-left: 5px solid var(--primary);
-        }
-
-        /* QUICK ACTION BUTTONS */
-        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
-        .action-btn {
-            padding: 15px; border-radius: 14px; text-align: center;
-            text-decoration: none; font-weight: 700; font-size: 0.85rem;
-            transition: 0.3s;
-        }
-        .primary-btn { background: var(--primary); color: white; }
-        .gold-btn { background: var(--gold); color: black; box-shadow: 0 10px 15px rgba(245, 158, 11, 0.2); }
-
-        /* TURF TAB (HIDDEN BY DEFAULT) */
-        #turf-scorer { display: none; }
+        /* IPL CARD */
+        .ipl-card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid #1e293b; margin-bottom: 15px; }
     </style>
 </head>
-<body onload="init()">
+<body>
 
-<header>
-    <div style="font-size: 0.7rem; font-weight: 800; color: #94a3b8; margin-bottom: 5px;">
-        <span class="live-pulse"></span>IPL 2026 OFFICIAL ANALYST HUB
-    </div>
-    <div style="font-size: 1.4rem; font-weight: 900; letter-spacing: -1px;">CRICKET<span style="color: var(--primary);">PRO</span></div>
-</header>
+<div class="tab-bar">
+    <div class="tab active" onclick="openTab('turf', this)">TURF SCORER</div>
+    <div class="tab" onclick="openTab('ipl', this)">IPL 2026</div>
+</div>
 
-<div class="container" id="main-hub">
-    
-    <div class="match-card">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div>
-                <div class="result-badge">Match Finished</div>
-                <div style="font-size: 0.7rem; color: #64748b; margin-top: 5px;">M. Chinnaswamy Stadium, Bengaluru</div>
-            </div>
-            <img src="https://img.icons8.com/color/48/cricket.png" width="30">
-        </div>
-
-        <div class="team-row">
-            <span class="team-name">LSG</span>
-            <span class="score-val">181/5</span>
-        </div>
-        <div class="team-row">
-            <span class="team-name" style="color: #ef4444;">RCB</span>
-            <span class="score-val">182/4</span>
-        </div>
-
-        <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; font-weight: 600; color: var(--accent);">
-            🏆 RCB won by 6 wickets (IPL 2026 Match 15)
-        </div>
+<div id="turf" class="container active">
+    <div class="turf-header">
+        <button class="team-btn active" id="btn-a" onclick="switchTeam('A')">TEAM A</button>
+        <div style="font-weight: 900; color: var(--primary);">VS</div>
+        <button class="team-btn" id="btn-b" onclick="switchTeam('B')">TEAM B</button>
     </div>
 
-    <div class="insight-box">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
-            <div style="background: var(--primary); padding: 5px; border-radius: 8px;">📊</div>
-            <span style="font-weight: 800; font-size: 0.9rem;">NEXT MATCH PREDICTION</span>
-        </div>
-        <p style="font-size: 0.8rem; color: #cbd5e1; line-height: 1.6;">
-            Kal ka match <strong>MI vs DC</strong> ke beech hai. Wankhede ki pitch par 2026 mein heavy dew factor dekha ja raha hai. Chasing team ko 80% advantage milegi. Full team aur session reports ke liye niche click karein.
-        </p>
+    <div class="score-board">
+        <div id="current-team-label" style="font-size: 0.8rem; margin-bottom: 10px; color: #94a3b8;">TEAM A BATTING</div>
+        <div class="score-val" id="display-score">0 / 0</div>
+        <div style="font-size: 1.2rem; margin-top: 10px;">Over: <span id="display-over">0.0</span></div>
     </div>
 
-    <div class="action-grid">
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="action-btn gold-btn">
-            BUY KAL KI TEAM (₹10)
-        </a>
-        <a href="#" class="action-btn primary-btn" onclick="toggleTurf()">
-            OPEN TURF SCORER
-        </a>
-    </div>
-
-    <div style="text-align: center; margin-top: 30px; font-size: 0.65rem; color: #475569;">
-        © 2026 CricketPro Analyst Services. Powered by Data Science.
+    <div class="grid-ctrl">
+        <button class="btn" onclick="addRun(0)">0</button>
+        <button class="btn" onclick="addRun(1)">1</button>
+        <button class="btn" onclick="addRun(2)">2</button>
+        <button class="btn" onclick="addRun(3)">3</button>
+        <button class="btn" onclick="addRun(4)" style="color:var(--accent)">4</button>
+        <button class="btn" onclick="addRun(6)" style="color:var(--accent)">6</button>
+        <button class="btn wicket" onclick="addWicket()">W</button>
+        
+        <button class="btn extra" onclick="addExtra('WD')">WD</button>
+        <button class="btn extra" onclick="addExtra('NB')">NB</button>
+        <button class="btn special" onclick="resetCurrent()">RESET</button>
     </div>
 </div>
 
-<div class="container" id="turf-scorer">
-    <div class="match-card" style="text-align: center;">
-        <h3 style="margin-bottom: 20px;">TURF LIVE SCORER</h3>
-        <div style="font-size: 3.5rem; font-weight: 900; color: var(--accent);" id="t-score">0 / 0</div>
-        <div style="font-size: 1.1rem; margin-bottom: 20px;">Overs: <span id="t-over">0.0</span></div>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-            <button onclick="addRun(1)" style="padding:15px; border-radius:10px; border:none; background:#334155; color:white;">1</button>
-            <button onclick="addRun(4)" style="padding:15px; border-radius:10px; border:none; background:var(--primary); color:white;">4</button>
-            <button onclick="addRun(6)" style="padding:15px; border-radius:10px; border:none; background:var(--accent); color:white;">6</button>
-            <button onclick="addWicket()" style="padding:15px; border-radius:10px; border:none; background:#ef4444; color:white;">W</button>
+<div id="ipl" class="container">
+    <div class="ipl-card">
+        <div style="color: #64748b; font-size: 0.7rem; margin-bottom: 10px;">LATEST RESULT • IPL 2026</div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+            <span style="font-weight: 800;">GT</span><span>198/4</span>
         </div>
-        <button onclick="toggleTurf()" style="margin-top:20px; background:none; border:1px solid #334155; color:#94a3b8; padding:10px; border-radius:8px;">Back to IPL</button>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="font-weight: 800; color: var(--primary);">KKR</span><span>201/3</span>
+        </div>
+        <div style="text-align: center; color: var(--accent); font-size: 0.75rem; margin-top: 15px; font-weight: 700;">
+            KKR won by 7 wickets
+        </div>
     </div>
+    
+    <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" 
+       style="display: block; background: #fbbf24; color: #000; text-align: center; padding: 15px; border-radius: 15px; text-decoration: none; font-weight: 900;">
+       BUY MI vs CSK PREDICTION (₹10)
+    </a>
 </div>
 
 <script>
-    function init() {
-        if(window.location.hash === "#won") {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    function openTab(id, el) {
+        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    // Turf Logic
+    let currentTeam = 'A';
+    let data = {
+        'A': { score: 0, wickets: 0, balls: 0 },
+        'B': { score: 0, wickets: 0, balls: 0 }
+    };
+
+    function switchTeam(t) {
+        currentTeam = t;
+        document.getElementById('btn-a').classList.toggle('active', t === 'A');
+        document.getElementById('btn-b').classList.toggle('active', t === 'B');
+        document.getElementById('current-team-label').innerText = `TEAM ${t} BATTING`;
+        updateDisplay();
+    }
+
+    function addRun(r) {
+        data[currentTeam].score += r;
+        data[currentTeam].balls++;
+        updateDisplay();
+    }
+
+    function addWicket() {
+        if(data[currentTeam].wickets < 10) data[currentTeam].wickets++;
+        data[currentTeam].balls++;
+        updateDisplay();
+    }
+
+    function addExtra(type) {
+        data[currentTeam].score += 1; // Wide/NB gives 1 run, ball not counted
+        updateDisplay();
+    }
+
+    function resetCurrent() {
+        if(confirm("Reset Team " + currentTeam + " score?")) {
+            data[currentTeam] = { score: 0, wickets: 0, balls: 0 };
+            updateDisplay();
         }
     }
 
-    function toggleTurf() {
-        let hub = document.getElementById('main-hub');
-        let turf = document.getElementById('turf-scorer');
-        if(hub.style.display === 'none') {
-            hub.style.display = 'block'; turf.style.display = 'none';
-        } else {
-            hub.style.display = 'none'; turf.style.display = 'block';
-        }
-    }
-
-    let score=0, wickets=0, balls=0;
-    function addRun(r) { score+=r; balls++; update(); }
-    function addWicket() { wickets++; balls++; update(); }
-    function update() {
-        document.getElementById('t-score').innerText = score + " / " + wickets;
-        document.getElementById('t-over').innerText = Math.floor(balls/6) + "." + (balls%6);
+    function updateDisplay() {
+        let d = data[currentTeam];
+        let overs = Math.floor(d.balls/6) + "." + (d.balls%6);
+        document.getElementById('display-score').innerText = d.score + " / " + d.wickets;
+        document.getElementById('display-over').innerText = overs;
     }
 </script>
 
