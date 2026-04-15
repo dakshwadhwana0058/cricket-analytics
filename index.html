@@ -29,9 +29,9 @@
         /* CARDS */
         .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; position: relative; overflow: hidden; }
         
-        /* MONETIZATION */
-        .affiliate-banner { background: linear-gradient(135deg, #6366f1, #a855f7); border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; }
-        .aff-btn { background: #fff; color: #6366f1; padding: 8px 20px; border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 0.75rem; display: inline-block; margin-top: 10px; }
+        /* UPI PROMOTION BANNER */
+        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; color: #000; border: 2px solid #fff; }
+        .upi-btn { background: #000; color: #fff; padding: 10px 25px; border-radius: 10px; text-decoration: none; font-weight: 900; font-size: 0.85rem; display: inline-block; margin-top: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
         /* WIN PREDICTOR */
         .wp-bar { height: 10px; background: #334155; border-radius: 5px; display: flex; overflow: hidden; margin: 10px 0; }
@@ -41,39 +41,36 @@
         .scorer-big { font-size: 4rem; font-weight: 900; text-align: center; color: var(--gold); }
         .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .b-tool { border: none; padding: 15px; border-radius: 12px; font-weight: 900; background: #334155; color: white; }
-
-        /* EXPERT PREDICTION STYLES */
-        .expert-tag { position: absolute; top: 0; right: 0; background: var(--gold); color: #000; padding: 5px 15px; font-size: 0.6rem; font-weight: 900; border-bottom-left-radius: 15px; }
     </style>
 </head>
 <body>
 
 <header>
     <div class="logo">IPL ANALYST PRO</div>
-    <div style="font-size: 0.7rem; color: var(--red); font-weight: 900;">● LIVE CENTER</div>
+    <div style="font-size: 0.7rem; color: var(--red); font-weight: 900;">● MATCH STARTING SOON</div>
 </header>
 
 <div class="container">
 
-    <div class="affiliate-banner">
-        <span style="font-weight: 900; font-size: 0.9rem;">🏏 JOIN FOR EXPERT TEAMS</span><br>
-        <a href="YOUR_TELEGRAM_LINK" class="aff-btn">JOIN TELEGRAM</a>
+    <div class="upi-banner">
+        <div style="font-size: 0.7rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px;">Expert Prediction Only ₹10</div>
+        <div style="font-size: 1.1rem; font-weight: 900; margin: 5px 0;">GET RCB vs LSG WINNING TEAM</div>
+        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">💰 PAY ₹10 & GET TEAM</a>
+        <p style="font-size: 0.55rem; margin-top: 8px; font-weight: 700;">*Verified Data based on Digvesh Rathee Stats</p>
     </div>
 
     <div id="p-live" class="page active">
         <div class="card">
-            <div style="text-align: center; font-size: 0.7rem; color: var(--accent); font-weight: 800; margin-bottom: 10px;">IPL 2026 • MATCH 23</div>
+            <div style="text-align: center; font-size: 0.7rem; color: var(--accent); font-weight: 800; margin-bottom: 15px;">RCB vs LSG • CHINNASWAMY</div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="text-align: center;">
-                    <img src="https://via.placeholder.com/40/ef4444/fff?text=RCB" style="border-radius: 50%;">
-                    <div style="font-weight: 900; margin-top: 5px;">RCB</div>
-                    <div style="font-size: 1.5rem; font-weight: 900;">0/0</div>
+                    <div style="font-weight: 900; color: var(--red);">RCB</div>
+                    <div style="font-size: 1.8rem; font-weight: 900;">0/0</div>
                 </div>
-                <div style="font-weight: 900; opacity: 0.2; font-size: 1.2rem;">VS</div>
+                <div style="font-weight: 900; opacity: 0.2;">VS</div>
                 <div style="text-align: center;">
-                    <img src="https://via.placeholder.com/40/38bdf8/fff?text=LSG" style="border-radius: 50%;">
-                    <div style="font-weight: 900; margin-top: 5px;">LSG</div>
-                    <div style="font-size: 1.5rem; font-weight: 900;">0/0</div>
+                    <div style="font-weight: 900; color: var(--accent);">LSG</div>
+                    <div style="font-size: 1.8rem; font-weight: 900;">0/0</div>
                 </div>
             </div>
             
@@ -86,21 +83,17 @@
                     <div style="width: 45%; background: var(--red);"></div>
                     <div style="width: 55%; background: var(--accent);"></div>
                 </div>
-                <p style="text-align: center; font-size: 0.6rem; color: #64748b;">PREDICTOR: RATHEE FACTOR FAVORING LSG</p>
+                <p style="text-align: center; font-size: 0.6rem; color: #64748b;">RATHEE vs PATIDAR BATTLE LOADING...</p>
             </div>
         </div>
 
-        <div class="card" style="border: 2px solid var(--gold); background: rgba(251, 191, 36, 0.05);">
-            <div class="expert-tag">PREDICTION</div>
-            <div style="font-weight: 900; font-size: 0.9rem; color: var(--gold);">🔥 DIGVESH RATHEE vs PATIDAR</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; margin: 10px 0; line-height: 1.4;">
-                Hamaray analysis ke mutabiq, aaj **Digvesh Rathi** ka "Notebook Celebration" phir dikhega! Wo Rajat Patidar ko middle overs mein fasa sakte hain. 
-            </p>
-            <div style="background: rgba(34, 197, 94, 0.1); padding: 12px; border-radius: 10px; border: 1px dashed var(--green);">
-                <span style="display: block; font-weight: 900; color: var(--green); font-size: 0.8rem; text-align: center; margin-bottom: 8px;">DIGVESH PE PAISA LAGAO! 👇</span>
-                <a href="YOUR_FANTASY_APP_LINK" style="display: block; background: var(--green); color: #000; text-align: center; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 900; font-size: 0.8rem;">
-                    PLAY & WIN ON VISION11
-                </a>
+        <div class="card" style="background: rgba(34, 197, 94, 0.05); border: 1px dashed var(--green);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <div style="font-size: 0.6rem; color: #94a3b8; font-weight: 800;">YOUR WALLET</div>
+                    <div style="font-size: 1.2rem; font-weight: 900; color: var(--green);">₹0.00</div>
+                </div>
+                <button onclick="alert('Balance nikalne ke liye kam se kam ₹200 hona chahiye!')" style="background: var(--green); color: #000; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; font-size: 0.7rem;">WITHDRAW</button>
             </div>
         </div>
     </div>
@@ -118,53 +111,5 @@
                 <button class="b-tool" onclick="addT(2)">2</button>
                 <button class="b-tool" onclick="addT(4)" style="background: var(--accent);">4</button>
                 <button class="b-tool" onclick="addT(6)" style="background: var(--green);">6</button>
-                <button class="b-tool" onclick="takeW()" style="grid-column: span 2; background: var(--red);">OUT</button>
-                <button class="b-tool" onclick="addT(0)" style="grid-column: span 2;">DOT</button>
-                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; background: transparent; font-size: 0.6rem; color: #475569;">RESET MATCH</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="p-stats" class="page">
-        <div class="card">
-            <div style="font-weight: 900; margin-bottom: 15px;">MATCH MOMENTUM</div>
-            <svg viewBox="0 0 200 60" style="width: 100%;">
-                <polyline fill="none" stroke="var(--accent)" stroke-width="3" points="0,50 40,20 80,40 120,10 160,30 200,5" />
-            </svg>
-            <p style="font-size: 0.65rem; color: #475569; text-align: center; margin-top: 10px;">LSG GRAPH SHOWING UPWARD TREND</p>
-        </div>
-        
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&cu=INR" style="text-decoration: none;">
-            <div class="card" style="background: linear-gradient(45deg, #fbbf24, #f59e0b); border: none; text-align: center; color: #000; font-weight: 900;">
-                ☕ SUPPORT THE ANALYST (BUY CHAI)
-            </div>
-        </a>
-    </div>
-
-</div>
-
-<div class="nav-btm">
-    <div class="nav-btn active" onclick="tab('p-live', this)">Stadium<br>LIVE</div>
-    <div class="nav-btn" onclick="tab('p-turf', this)">Ground<br>TURF</div>
-    <div class="nav-btn" onclick="tab('p-stats', this)">Data<br>STATS</div>
-</div>
-
-<script>
-    function tab(id, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        el.classList.add('active');
-    }
-
-    let tr=0, tw=0, tb=0;
-    function addT(r){ tr+=r; tb++; updateT(); if(r==6) confetti(); }
-    function takeW(){ if(tw<10){ tw++; tb++; updateT(); } }
-    function updateT(){
-        document.getElementById('t-scr').innerText = tr+'-'+tw;
-        document.getElementById('t-ov').innerText = Math.floor(tb/6)+'.'+(tb%6);
-    }
-    function resetT(){ tr=0; tw=0; tb=0; updateT(); }
-</script>
-</body>
-</html>
+                <button class="b-tool" onclick="takeW()" style="grid-column: span 4; background: var(--red);">WICKET (OUT)</button>
+                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; background: transparent; font-size: 0.
