@@ -1,164 +1,193 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Cricket Analytics Pro</title>
-<style>
-  body {
-    font-family: Arial;
-    text-align: center;
-    background: linear-gradient(#006400, #228B22);
-    color: white;
-    margin: 0;
-    padding: 0;
-  }
-
-  h1 {
-    padding: 15px;
-    font-size: 22px;
-  }
-
-  .card {
-    background: rgba(255,255,255,0.1);
-    padding: 15px;
-    margin: 15px auto;
-    width: 90%;
-    max-width: 350px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px black;
-  }
-
-  input {
-    margin: 6px;
-    padding: 10px;
-    width: 90%;
-    border-radius: 5px;
-    border: none;
-    font-size: 14px;
-  }
-
-  button {
-    padding: 12px 25px;
-    background: orange;
-    color: black;
-    border: none;
-    cursor: pointer;
-    font-weight: bold;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-
-  #result {
-    margin-top: 15px;
-    white-space: pre-line;
-    font-size: 16px;
-    padding: 10px;
-  }
-
-  canvas {
-    background: white;
-    border-radius: 10px;
-    margin-top: 15px;
-    width: 90% !important;
-    max-width: 350px;
-  }
-
-  /* 📱 MOBILE RESPONSIVE */
-  @media (max-width: 600px) {
-    h1 {
-      font-size: 18px;
-    }
-
-    button {
-      width: 80%;
-    }
-  }
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cricket Analytics | Data Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-  <h1>🏏 Cricket Analytics Pro</h1>
+    <nav class="navbar">
+        <div class="logo">CRICKET<span>LAB</span></div>
+        <ul class="nav-links">
+            <li><a href="#dashboard">Home</a></li>
+            <li><a href="#stats">Player Stats</a></li>
+            <li><a href="#analysis">Analysis</a></li>
+        </ul>
+    </nav>
 
-  <div class="card">
-    <h3>Player 1</h3>
-    <input type="text" id="name1" placeholder="Player Name">
-    <input type="number" id="runs1" placeholder="Runs">
-    <input type="number" id="balls1" placeholder="Balls">
-  </div>
+    <header class="hero" id="dashboard">
+        <div class="overlay">
+            <h1>Cricket Analytics</h1>
+            <p>Ball-by-ball insights and predictive modeling for the modern game.</p>
+            <a href="#stats" class="btn">Explore Data</a>
+        </div>
+    </header>
 
-  <div class="card">
-    <h3>Player 2</h3>
-    <input type="text" id="name2" placeholder="Player Name">
-    <input type="number" id="runs2" placeholder="Runs">
-    <input type="number" id="balls2" placeholder="Balls">
-  </div>
+    <main class="container">
+        <section id="stats" class="section">
+            <h2 class="section-title">Key Performance Indicators</h2>
+            <div class="stats-grid">
+                <div class="card">
+                    <h3>Batting SR</h3>
+                    <p class="value">145.8</p>
+                    <span class="trend up">↑ 5.2%</span>
+                </div>
+                <div class="card">
+                    <h3>Bowling Avg</h3>
+                    <p class="value">22.4</p>
+                    <span class="trend down">↓ 1.1%</span>
+                </div>
+                <div class="card">
+                    <h3>Win Probability</h3>
+                    <p class="value">68%</p>
+                    <span class="trend">Stable</span>
+                </div>
+            </div>
+        </section>
 
-  <button onclick="compare()">Compare Players</button>
+        <section id="analysis" class="section">
+            <h2 class="section-title">Deep Dive Analysis</h2>
+            <div class="analysis-box">
+                <p>Using machine learning to analyze pitch conditions and player matchups. Our current model predicts a high advantage for spin bowlers in the second innings.</p>
+            </div>
+        </section>
+    </main>
 
-  <h2 id="result"></h2>
-
-  <canvas id="chart" width="300" height="200"></canvas>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    let chart;
-
-    function compare() {
-
-      let name1 = document.getElementById("name1").value || "Player 1";
-      let name2 = document.getElementById("name2").value || "Player 2";
-
-      let r1 = document.getElementById("runs1").value;
-      let b1 = document.getElementById("balls1").value;
-
-      let r2 = document.getElementById("runs2").value;
-      let b2 = document.getElementById("balls2").value;
-
-      if (b1 == 0 || b2 == 0) {
-        document.getElementById("result").innerText = "Balls cannot be 0";
-        return;
-      }
-
-      let sr1 = (r1 / b1) * 100;
-      let sr2 = (r2 / b2) * 100;
-
-      let winner = "";
-
-      if (sr1 > sr2) {
-        winner = "🏆 " + name1 + " is better";
-      } else if (sr2 > sr1) {
-        winner = "🏆 " + name2 + " is better";
-      } else {
-        winner = "🤝 Both are equal";
-      }
-
-      document.getElementById("result").innerText =
-        name1 + " SR: " + sr1.toFixed(2) + "\n" +
-        name2 + " SR: " + sr2.toFixed(2) + "\n\n" +
-        winner;
-
-      // Fix chart reload issue
-      if (chart) {
-        chart.destroy();
-      }
-
-      let ctx = document.getElementById("chart").getContext("2d");
-
-      chart = new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: [name1, name2],
-          datasets: [{
-            label: "Strike Rate",
-            data: [sr1, sr2]
-          }]
-        }
-      });
-    }
-  </script>
+    <footer>
+        <p>&copy; 2026 Cricket Analytics Dashboard. Built for performance.</p>
+    </footer>
 
 </body>
 </html>
+/* --- RESET --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Outfit', sans-serif;
+    color: #1a1a1a;
+    background-color: #f8fafc;
+    line-height: 1.6;
+}
+
+/* --- NAVIGATION --- */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.2rem 5%;
+    background: #0f172a;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo { font-weight: 800; font-size: 1.4rem; letter-spacing: 1px; }
+.logo span { color: #38bdf8; }
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-links a {
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.nav-links a:hover { color: white; }
+
+/* --- HERO SECTION --- */
+.hero {
+    height: 60vh;
+    background: linear-gradient(rgba(15, 23, 42, 0.8), rgba(15, 23, 42, 0.8)), 
+                url('https://images.unsplash.com/photo-1531415074968-036ba1b575da?auto=format&fit=crop&w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    padding: 0 20px;
+}
+
+.hero h1 { font-size: clamp(2rem, 8vw, 3.5rem); margin-bottom: 1rem; }
+.hero p { font-size: 1.1rem; max-width: 600px; margin: 0 auto; opacity: 0.9; }
+
+.btn {
+    display: inline-block;
+    margin-top: 25px;
+    padding: 12px 30px;
+    background: #38bdf8;
+    color: #0f172a;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: transform 0.2s;
+}
+
+.btn:hover { transform: translateY(-3px); }
+
+/* --- CONTENT --- */
+.container { padding: 40px 5%; max-width: 1100px; margin: 0 auto; }
+
+.section { margin-bottom: 60px; }
+.section-title { margin-bottom: 30px; font-size: 1.8rem; border-left: 5px solid #38bdf8; padding-left: 15px; }
+
+/* --- STATS GRID (MOBILE FIRST) --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Stack vertically on phones */
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.card h3 { color: #64748b; font-size: 1rem; margin-bottom: 10px; }
+.card .value { font-size: 2.5rem; font-weight: 800; color: #0f172a; }
+
+.trend { font-size: 0.8rem; font-weight: 600; padding: 4px 10px; border-radius: 20px; background: #f1f5f9; }
+.trend.up { color: #22c55e; }
+.trend.down { color: #ef4444; }
+
+/* --- ANALYSIS BOX --- */
+.analysis-box {
+    background: #e2e8f0;
+    padding: 30px;
+    border-radius: 15px;
+    font-style: italic;
+}
+
+/* --- TABLETS & DESKTOP --- */
+@media (min-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(3, 1fr); /* 3 Columns on desktop */
+    }
+    
+    .navbar { padding: 1.2rem 10%; }
+}
+
+footer {
+    background: #0f172a;
+    color: #94a3b8;
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 0.9rem;
+}
