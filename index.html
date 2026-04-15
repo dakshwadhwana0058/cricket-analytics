@@ -3,85 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Analyst Pro | Mid-Match Update</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <title>IPL Analyst Pro | Live Score</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; --green: #22c55e; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: var(--bg); color: #fff; padding-bottom: 80px; }
 
-        /* LIVE COUNTER TAG */
-        .live-tag { background: rgba(34, 197, 94, 0.15); color: var(--green); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; border: 1px solid var(--green); display: inline-block; margin-bottom: 10px; }
-        
-        header { padding: 15px; background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; text-align: center; }
+        header { padding: 15px; background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .live-dot { height: 8px; width: 8px; background: var(--red); border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; text-align: center; }
-
-        /* SCORE STYLING */
-        .score-box { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
-        .team-score { font-size: 2.2rem; font-weight: 900; }
         
-        /* UPI BUTTON - HIGH CONVERSION */
-        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 20px; padding: 20px; margin-bottom: 15px; color: #000; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3); }
-        .upi-btn { background: #000; color: #fff; padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 900; display: block; margin-top: 15px; font-size: 1rem; }
+        /* WIDGET CONTAINER */
+        .score-widget { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; min-height: 250px; }
 
-        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; }
+        /* UPI BANNER */
+        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 20px; padding: 20px; margin-bottom: 15px; color: #000; text-align: center; border: 3px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .upi-btn { background: #000; color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 900; display: block; margin-top: 10px; font-size: 1.1rem; }
+
+        .analyst-card { background: #1e293b; border-radius: 15px; padding: 15px; border-left: 5px solid var(--accent); margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="live-tag">● LIVE: 248 PEOPLE VIEWING</div>
-    <div style="font-weight: 900; color: var(--accent);">IPL ANALYST PRO</div>
+    <div style="font-size: 0.7rem; font-weight: 900; color: var(--green);"><span class="live-dot"></span> LIVE MATCH TRACKER</div>
+    <div style="font-weight: 900; color: var(--accent); font-size: 1.2rem;">IPL ANALYST PRO</div>
 </header>
 
 <div class="container">
 
     <div class="upi-banner">
-        <div style="font-weight: 900; font-size: 0.8rem; text-transform: uppercase;">Final Prediction After Innings Break</div>
-        <div style="font-size: 1.3rem; font-weight: 900; margin: 8px 0;">RCB CHASE OR COLLAPSE?</div>
-        <div style="font-size: 0.75rem; font-weight: 700;">Get Digvesh Rathee's Bowling Entry Time & Wicket Strategy</div>
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">GET 2nd INNINGS TEAM (₹10)</a>
+        <div style="font-weight: 900; font-size: 0.9rem;">WINNING TEAM TIPS (2nd INNINGS)</div>
+        <div style="font-size: 1.4rem; font-weight: 900;">RCB CHASE SPECIAL ✅</div>
+        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">GET TIPS FOR ₹10</a>
     </div>
 
-    <div class="card">
-        <div style="font-size: 0.7rem; font-weight: 800; color: var(--gold); margin-bottom: 10px;">MATCH STATUS: INNINGS BREAK SOON</div>
-        <div class="score-box">
-            <div>
-                <div style="color: var(--accent); font-weight: 900;">LSG</div>
-                <div class="team-score">182/6</div>
-                <div style="font-size: 0.8rem; opacity: 0.6;">(19.2 Ov)</div>
-            </div>
-            <div style="font-weight: 900; opacity: 0.2; font-size: 1.5rem;">VS</div>
-            <div>
-                <div style="color: var(--red); font-weight: 900;">RCB</div>
-                <div class="team-score">Yet to Bat</div>
-            </div>
+    <div class="score-widget">
+        <iframe src="https://www.scorebat.com/embed/livescore/" frameborder="0" width="100%" height="300" allowfullscreen allow='autoplay; fullscreen' style="width:100%; height:300px; overflow:hidden;"></iframe>
         </div>
-        <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; font-size: 0.8rem;">
-            <strong>Target:</strong> Calculating... | <strong>Pitch:</strong> Getting Slower
-        </div>
-    </div>
 
-    <div class="card" style="border-left: 5px solid var(--accent); text-align: left;">
-        <div style="font-weight: 900; color: var(--accent); font-size: 0.9rem;">MID-MATCH ANALYSIS</div>
-        <p style="font-size: 0.8rem; margin-top: 8px; color: #94a3b8; line-height: 1.5;">
-            Bhaiyon, jaisa maine kaha tha, LSG ne 180+ touch kar liya hai. Chinnaswamy mein balls grip ho rahi hain. 
-            <strong>Digvesh Rathee</strong> ka 4 over ka spell RCB ke middle order ko khatam kar sakta hai. 
-            Aaj LSG defend karegi!
+    <div class="analyst-card">
+        <div style="font-weight: 900; color: var(--accent); font-size: 0.8rem; margin-bottom: 5px;">RATHEE'S STRATEGY</div>
+        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">
+            RCB ki batting shuru hone wali hai. <strong>Digvesh Rathee</strong> ka 1st over crucial hoga. 
+            Pitch slow ho gayi hai, spinners match jitwayenge!
         </p>
     </div>
 
 </div>
 
-<script>
-    // Fake visitor count to increase trust
-    setInterval(() => {
-        let count = Math.floor(Math.random() * (260 - 240 + 1) + 240);
-        document.querySelector('.live-tag').innerText = `● LIVE: ${count} PEOPLE VIEWING`;
-    }, 5000);
-</script>
+<div style="text-align: center; color: #475569; font-size: 0.6rem; padding: 10px;">
+    Data provided by IPL Analyst Professional Services
+</div>
 
 </body>
 </html>
