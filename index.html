@@ -3,161 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Master Analytics | Live Scorer & Schedule</title>
-    
+    <title>IPL 2026 Pro Analytics</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #020617; --surface: #1e293b; --accent: #22c55e; --neon: #38bdf8; --gold: #fbbf24; --red: #ef4444; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--bg); color: #f8fafc; min-height: 100vh; padding-bottom: 30px; }
+        :root { --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --gold: #fbbf24; --green: #22c55e; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
+        body { background: var(--bg); color: #fff; padding-bottom: 80px; overflow-x: hidden; }
 
-        nav { background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(10px); padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-weight: 900; font-size: 0.9rem; color: var(--neon); text-transform: uppercase; }
-        .logo span { color: #fff; }
+        /* Header */
+        header { padding: 20px; background: linear-gradient(to bottom, #1e293b, #0f172a); border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
+        .logo { font-size: 1.2rem; font-weight: 900; color: var(--accent); letter-spacing: 1px; }
 
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .card { background: rgba(30, 41, 59, 0.5); backdrop-filter: blur(10px); padding: 20px; border-radius: 25px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        /* Navigation Bar (Bottom) */
+        .nav-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(30, 41, 59, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: space-around; padding: 15px; border-top: 1px solid rgba(255,255,255,0.1); z-index: 1000; }
+        .nav-item { color: #94a3b8; font-size: 0.75rem; font-weight: 600; cursor: pointer; text-align: center; }
+        .nav-item.active { color: var(--accent); }
 
-        /* SCOREBOARD */
-        .score-display { text-align: center; margin: 10px 0 25px 0; }
-        .main-score { font-size: 5rem; font-weight: 900; color: var(--gold); line-height: 1; letter-spacing: -2px; }
-        .overs-display { color: #94a3b8; font-size: 1.2rem; margin-top: 10px; font-weight: 700; }
+        .content-section { display: none; padding: 15px; animation: fadeIn 0.3s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* CONTROLS */
-        .control-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
-        .section-label { grid-column: span 4; font-size: 0.7rem; text-transform: uppercase; color: #64748b; letter-spacing: 1.5px; margin-bottom: 5px; font-weight: 700; }
-        .btn { border: none; padding: 18px 5px; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.2s; font-size: 1rem; color: #000; }
-        .btn:active { transform: scale(0.92); }
-        .b-runs { background: var(--neon); }
-        .b-boundary { background: var(--accent); }
-        .b-extra { background: #475569; color: white; font-size: 0.8rem; }
-        .b-out { background: var(--red); color: white; grid-column: span 4; padding: 20px; font-size: 1.2rem; }
+        /* Cards & UI */
+        .card { background: var(--card); border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        .match-tag { font-size: 0.65rem; background: var(--accent); color: #000; padding: 3px 8px; border-radius: 5px; font-weight: 900; margin-bottom: 10px; display: inline-block; }
+        
+        /* Stats Graph */
+        .graph-container { height: 120px; width: 100%; margin-top: 15px; position: relative; }
+        .bar { fill: var(--accent); opacity: 0.8; }
+        .player-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
-        input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.4); color: white; text-align: center; font-weight: 700; margin-bottom: 10px; }
+        /* Scorer UI */
+        .score-big { font-size: 4rem; font-weight: 900; text-align: center; color: var(--gold); margin: 10px 0; }
+        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .btn { padding: 15px 5px; border-radius: 12px; border: none; font-weight: 800; background: #334155; color: white; }
+        .btn-run { background: var(--accent); color: #000; }
+        .btn-wicket { background: #ef4444; grid-column: span 4; margin-top: 5px; }
 
-        /* UPCOMING MATCHES SECTION */
-        .schedule-title { font-size: 1.1rem; font-weight: 900; margin: 25px 0 15px 5px; color: var(--neon); display: flex; align-items: center; gap: 10px; }
-        .match-row { background: rgba(255,255,255,0.03); border-radius: 15px; padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(255,255,255,0.05); }
-        .match-info { font-size: 0.8rem; }
-        .match-teams { font-weight: 800; font-size: 0.95rem; margin-top: 3px; }
-        .match-date { color: var(--gold); font-weight: 700; font-size: 0.7rem; text-transform: uppercase; }
-        .venue { color: #64748b; font-size: 0.7rem; }
-
-        /* UPI TIP BUTTON */
-        .support-link { display: block; background: linear-gradient(135deg, #059669, #10b981); color: white; text-align: center; padding: 16px; border-radius: 15px; text-decoration: none; font-weight: 900; margin-top: 15px; box-shadow: 0 4px 15px rgba(16,185,129,0.2); }
+        input { width: 100%; padding: 12px; border-radius: 10px; border: none; background: rgba(0,0,0,0.3); color: white; margin-bottom: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">IPL MASTER <span>ANALYTICS</span></div>
-        <div style="font-size: 0.7rem; color: var(--accent); font-weight: 800;">● LIVE UPDATES</div>
-    </nav>
+<header>
+    <div class="logo">IPL MASTER 2026</div>
+</header>
 
-    <div class="container">
-        
-        <div class="card">
-            <div style="display: flex; gap: 10px;">
-                <input type="number" id="targ" placeholder="TARGET">
-                <input type="number" id="ovr" placeholder="OVERS">
-            </div>
-
-            <div class="score-display">
-                <div class="main-score" id="scr">0-0</div>
-                <div class="overs-display">OVERS: <span id="ov">0.0</span></div>
-            </div>
-
-            <div class="control-group">
-                <div class="section-label">Scoring</div>
-                <button class="btn b-runs" onclick="addRun(0)">0</button>
-                <button class="btn b-runs" onclick="addRun(1)">1</button>
-                <button class="btn b-runs" onclick="addRun(2)">2</button>
-                <button class="btn b-runs" onclick="addRun(3)">3</button>
-                <button class="btn b-boundary" onclick="addRun(4)" style="grid-column: span 2;">4 (FOUR)</button>
-                <button class="btn b-boundary" onclick="addRun(6)" style="grid-column: span 2; background: #a855f7; color: white;">6 (SIX)</button>
-            </div>
-
-            <div class="control-group">
-                <div class="section-label">Extras</div>
-                <button class="btn b-extra" onclick="addExtra('wd')">WD</button>
-                <button class="btn b-extra" onclick="addExtra('nb')">NB</button>
-                <button class="btn b-extra" onclick="addExtra('lb')">LB</button>
-                <button class="btn b-extra" onclick="addExtra('b')">B</button>
-                <button class="btn b-out" onclick="takeWicket()">WICKET (OUT)</button>
-            </div>
-
-            <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPL%20Dev&cu=INR&tn=Support%20Cricket" class="support-link">
-                ☕ TIP THE DEV (₹20)
-            </a>
-        </div>
-
-        <div class="schedule-title">📅 UPCOMING MATCH CENTER</div>
-        
-        <div class="match-row">
-            <div class="match-info">
-                <div class="match-date">Tomorrow • 7:30 PM</div>
-                <div class="match-teams">MI vs PBKS</div>
-                <div class="venue">Wankhede Stadium, Mumbai</div>
-            </div>
-            <div style="color: var(--neon); font-weight: 900;">APR 16</div>
-        </div>
-
-        <div class="match-row">
-            <div class="match-info">
-                <div class="match-date">Friday • 7:30 PM</div>
-                <div class="match-teams">GT vs KKR</div>
-                <div class="venue">Narendra Modi Stadium, Ahmedabad</div>
-            </div>
-            <div style="color: var(--neon); font-weight: 900;">APR 17</div>
-        </div>
-
-        <div class="match-row">
-            <div class="match-info">
-                <div class="match-date">Saturday • 3:30 PM</div>
-                <div class="match-teams">RCB vs DC</div>
-                <div class="venue">M. Chinnaswamy, Bengaluru</div>
-            </div>
-            <div style="color: var(--neon); font-weight: 900;">APR 18</div>
-        </div>
-
-        <div class="match-row">
-            <div class="match-info">
-                <div class="match-date">Saturday • 7:30 PM</div>
-                <div class="match-teams">SRH vs CSK</div>
-                <div class="venue">Rajiv Gandhi Stadium, Hyderabad</div>
-            </div>
-            <div style="color: var(--neon); font-weight: 900;">APR 18</div>
-        </div>
-
-        <div style="text-align: center; color: #475569; font-size: 0.6rem; margin-top: 20px;">
-            IPL 2026 OFFICIAL SCHEDULE • ALL TIMES IST
-        </div>
-
+<div id="matches" class="content-section active">
+    <h3 style="margin-bottom: 15px; color: var(--gold);">UPCOMING FIXTURES</h3>
+    
+    <div class="card">
+        <span class="match-tag" style="background: #ef4444; color: #fff;">LIVE</span>
+        <div style="font-weight: 900; font-size: 1.2rem;">RCB vs LSG</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Tonight • M. Chinnaswamy, Bengaluru</div>
     </div>
 
-    <script>
-        let runs = 0, wickets = 0, balls = 0;
-        function updateDisplay() {
-            document.getElementById('scr').innerText = `${runs}-${wickets}`;
-            document.getElementById('ov').innerText = `${Math.floor(balls / 6)}.${balls % 6}`;
+    <div class="card">
+        <span class="match-tag">TOMORROW</span>
+        <div style="font-weight: 900; font-size: 1.2rem;">MI vs PBKS</div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">Wankhede Stadium, Mumbai</div>
+    </div>
+</div>
+
+<div id="scorer" class="content-section">
+    <div class="card">
+        <input type="number" id="targ" placeholder="SET TARGET RUNS">
+        <div class="score-big" id="scr">0-0</div>
+        <div style="text-align: center; font-weight: 700; color: #94a3b8; margin-bottom: 20px;">OVERS: <span id="ov">0.0</span></div>
+        
+        <div class="btn-grid">
+            <button class="btn btn-run" onclick="addRun(1)">1</button>
+            <button class="btn btn-run" onclick="addRun(2)">2</button>
+            <button class="btn btn-run" onclick="addRun(3)">3</button>
+            <button class="btn btn-run" onclick="addRun(4)">4</button>
+            <button class="btn btn-run" onclick="addRun(6)" style="grid-column: span 4; background: var(--green);">SIXER (6)</button>
+            <button class="btn" onclick="addExtra()">WD/NB</button>
+            <button class="btn btn-wicket" onclick="takeWicket()">WICKET (OUT)</button>
+        </div>
+    </div>
+</div>
+
+<div id="insights" class="content-section">
+    <h3 style="margin-bottom: 15px; color: var(--gold);">2026 PLAYER PERFORMANCE</h3>
+    
+    <div class="card">
+        <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 10px;">TOP BATTERS (THIS SEASON)</div>
+        <div class="player-row"><span>Virat Kohli (RCB)</span> <strong>179 Runs</strong></div>
+        <div class="player-row"><span>Rajat Patidar (RCB)</span> <strong>195 Runs</strong></div>
+        <div class="player-row"><span>H. Klaasen (SRH)</span> <strong>224 Runs</strong></div>
+        
+        <div style="margin-top: 20px; font-weight: 700; font-size: 0.9rem;">TEAM MOMENTUM (Last 5 Games)</div>
+        <div class="graph-container">
+            <svg viewBox="0 0 200 100" style="width: 100%; height: 100%;">
+                <polyline fill="none" stroke="#38bdf8" stroke-width="3" points="0,80 40,30 80,50 120,10 160,40 200,20" />
+                <circle cx="40" cy="30" r="3" fill="#fbbf24" />
+                <circle cx="120" cy="10" r="3" fill="#fbbf24" />
+            </svg>
+        </div>
+        <div style="font-size: 0.6rem; color: #64748b; text-align: center;">Graph: RCB Scoring Rate Variance</div>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="nav-item active" onclick="showTab('matches')">🏟️<br>Matches</div>
+    <div class="nav-item" onclick="showTab('scorer')">🏏<br>Scorer</div>
+    <div class="nav-item" onclick="showTab('insights')">📊<br>Insights</div>
+</div>
+
+<script>
+    function showTab(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+
+    let runs = 0, wickets = 0, balls = 0;
+    function updateDisplay() {
+        document.getElementById('scr').innerText = `${runs}-${wickets}`;
+        document.getElementById('ov').innerText = `${Math.floor(balls / 6)}.${balls % 6}`;
+    }
+    function addRun(r) { runs += r; balls++; updateDisplay(); checkVictory(); }
+    function addExtra() { runs += 1; updateDisplay(); }
+    function takeWicket() { if (wickets < 10) { wickets++; balls++; updateDisplay(); } }
+    function checkVictory() {
+        const target = parseInt(document.getElementById('targ').value);
+        if (target && runs >= target) {
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
-        function addRun(r) { runs += r; balls++; updateDisplay(); checkVictory(); }
-        function addExtra(type) {
-            if (type === 'wd' || type === 'nb') runs += 1;
-            else { runs += 1; balls++; }
-            updateDisplay();
-        }
-        function takeWicket() {
-            if (wickets < 10) { wickets++; balls++; updateDisplay(); }
-        }
-        function checkVictory() {
-            const target = parseInt(document.getElementById('targ').value);
-            if (target && runs >= target) {
-                confetti({ particleCount: 150, spread: 70 });
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
