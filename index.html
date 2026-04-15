@@ -3,136 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Analyst Pro | RCB vs LSG</title>
+    <title>IPL Analyst Pro | Mid-Match Update</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; --green: #22c55e; }
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; padding-bottom: 100px; overflow-x: hidden; }
+        body { background: var(--bg); color: #fff; padding-bottom: 80px; }
 
-        header { padding: 15px; background: rgba(15,23,42,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-        .logo { font-weight: 900; color: var(--accent); letter-spacing: 1px; }
-
-        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; z-index: 1000; }
-        .nav-btn { color: #64748b; font-size: 0.7rem; font-weight: 800; text-align: center; cursor: pointer; }
-        .nav-btn.active { color: var(--accent); }
-
+        /* LIVE COUNTER TAG */
+        .live-tag { background: rgba(34, 197, 94, 0.15); color: var(--green); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 900; border: 1px solid var(--green); display: inline-block; margin-bottom: 10px; }
+        
+        header { padding: 15px; background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 100; text-align: center; }
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        .page { display: none; animation: slideUp 0.3s ease; }
-        .page.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; text-align: center; }
 
-        .card { background: var(--card); border-radius: 20px; padding: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        /* SCORE STYLING */
+        .score-box { display: flex; justify-content: space-between; align-items: center; margin: 15px 0; }
+        .team-score { font-size: 2.2rem; font-weight: 900; }
         
-        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 15px; padding: 15px; margin-bottom: 15px; text-align: center; color: #000; border: 2px solid #fff; }
-        .upi-btn { background: #000; color: #fff; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 900; font-size: 0.85rem; display: inline-block; margin-top: 10px; }
+        /* UPI BUTTON - HIGH CONVERSION */
+        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 20px; padding: 20px; margin-bottom: 15px; color: #000; box-shadow: 0 10px 30px rgba(251, 191, 36, 0.3); }
+        .upi-btn { background: #000; color: #fff; padding: 15px 30px; border-radius: 12px; text-decoration: none; font-weight: 900; display: block; margin-top: 15px; font-size: 1rem; }
 
-        .t-input { width: 45%; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; padding: 8px; color: white; text-align: center; font-weight: 700; }
-        .scorer-big { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--gold); }
-        
-        /* UPDATED TURF GRID */
-        .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-        .b-tool { border: none; padding: 12px; border-radius: 10px; font-weight: 900; background: #334155; color: white; font-size: 0.8rem; }
-        .btn-extra { background: #475569; color: #fff; }
+        .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">IPL ANALYST PRO</div>
-    <div style="font-size: 0.7rem; color: var(--red); font-weight: 900;">🔥 TOSS IN 10 MINS</div>
+    <div class="live-tag">● LIVE: 248 PEOPLE VIEWING</div>
+    <div style="font-weight: 900; color: var(--accent);">IPL ANALYST PRO</div>
 </header>
 
 <div class="container">
 
     <div class="upi-banner">
-        <div style="font-size: 0.7rem; font-weight: 900;">PREMIUM PREDICTION</div>
-        <div style="font-size: 1.1rem; font-weight: 900;">GET WINNING TEAM (₹10)</div>
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">PAY NOW</a>
+        <div style="font-weight: 900; font-size: 0.8rem; text-transform: uppercase;">Final Prediction After Innings Break</div>
+        <div style="font-size: 1.3rem; font-weight: 900; margin: 8px 0;">RCB CHASE OR COLLAPSE?</div>
+        <div style="font-size: 0.75rem; font-weight: 700;">Get Digvesh Rathee's Bowling Entry Time & Wicket Strategy</div>
+        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">GET 2nd INNINGS TEAM (₹10)</a>
     </div>
 
-    <div id="p-live" class="page active">
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="text-align: center;"><div style="color:var(--red); font-weight:900;">RCB</div><div id="r-score" style="font-size:1.5rem; font-weight:900;">0/0</div></div>
-                <div style="opacity:0.3; font-weight: 900;">VS</div>
-                <div style="text-align: center;"><div style="color:var(--accent); font-weight:900;">LSG</div><div id="l-score" style="font-size:1.5rem; font-weight:900;">0/0</div></div>
+    <div class="card">
+        <div style="font-size: 0.7rem; font-weight: 800; color: var(--gold); margin-bottom: 10px;">MATCH STATUS: INNINGS BREAK SOON</div>
+        <div class="score-box">
+            <div>
+                <div style="color: var(--accent); font-weight: 900;">LSG</div>
+                <div class="team-score">182/6</div>
+                <div style="font-size: 0.8rem; opacity: 0.6;">(19.2 Ov)</div>
+            </div>
+            <div style="font-weight: 900; opacity: 0.2; font-size: 1.5rem;">VS</div>
+            <div>
+                <div style="color: var(--red); font-weight: 900;">RCB</div>
+                <div class="team-score">Yet to Bat</div>
             </div>
         </div>
-        <div class="card" style="border-left: 4px solid var(--gold);">
-            <div style="font-weight: 900; color: var(--gold); font-size: 0.8rem;">BATTLE ALERT</div>
-            <p style="font-size: 0.75rem; color: #94a3b8; margin-top: 5px;">Digvesh Rathee will bowl key overs to Patidar. Today Rathee can be the game changer!</p>
-        </div>
-    </div>
-
-    <div id="p-turf" class="page">
-        <div class="card">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                <input type="text" class="t-input" placeholder="TEAM A">
-                <input type="text" class="t-input" placeholder="TEAM B">
-            </div>
-            <div class="scorer-big" id="t-scr">0-0</div>
-            <div style="text-align: center; margin-bottom: 15px; font-weight: 800; color: #94a3b8;">OVERS: <span id="t-ov">0.0</span></div>
-            
-            <div class="btn-grid">
-                <button class="b-tool" onclick="addT(1)">1</button>
-                <button class="b-tool" onclick="addT(2)">2</button>
-                <button class="b-tool" onclick="addT(4)" style="background:var(--accent)">4</button>
-                <button class="b-tool" onclick="addT(6)" style="background:var(--green)">6</button>
-                
-                <button class="b-tool btn-extra" onclick="addExtra()">WD</button>
-                <button class="b-tool btn-extra" onclick="addExtra()">NB</button>
-                <button class="b-tool btn-extra" onclick="addT(0)">DOT</button>
-                <button class="b-tool" onclick="takeW()" style="background:var(--red)">OUT</button>
-                
-                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; background: transparent; color: #475569; font-size: 0.6rem;">RESET MATCH</button>
-            </div>
+        <div style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; font-size: 0.8rem;">
+            <strong>Target:</strong> Calculating... | <strong>Pitch:</strong> Getting Slower
         </div>
     </div>
 
-    <div id="p-stats" class="page">
-        <div class="card">
-            <div style="font-weight: 900; margin-bottom: 10px; color: var(--accent);">PRO ANALYSIS</div>
-            <div style="font-size: 0.8rem; line-height: 2;">
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid #1e293b;">
-                    <span>Digvesh Rathee Form</span> <span style="color:var(--green)">⭐⭐⭐⭐</span>
-                </div>
-                <div style="display:flex; justify-content:space-between; border-bottom: 1px solid #1e293b;">
-                    <span>Patidar vs Spin</span> <span style="color:var(--red)">Struggling</span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                    <span>Pitch Report</span> <span>Dry (Spin Friendly)</span>
-                </div>
-            </div>
-        </div>
+    <div class="card" style="border-left: 5px solid var(--accent); text-align: left;">
+        <div style="font-weight: 900; color: var(--accent); font-size: 0.9rem;">MID-MATCH ANALYSIS</div>
+        <p style="font-size: 0.8rem; margin-top: 8px; color: #94a3b8; line-height: 1.5;">
+            Bhaiyon, jaisa maine kaha tha, LSG ne 180+ touch kar liya hai. Chinnaswamy mein balls grip ho rahi hain. 
+            <strong>Digvesh Rathee</strong> ka 4 over ka spell RCB ke middle order ko khatam kar sakta hai. 
+            Aaj LSG defend karegi!
+        </p>
     </div>
 
-</div>
-
-<div class="nav-btm">
-    <div class="nav-btn active" onclick="tab('p-live', this)">LIVE</div>
-    <div class="nav-btn" onclick="tab('p-turf', this)">TURF</div>
-    <div class="nav-btn" onclick="tab('p-stats', this)">STATS</div>
 </div>
 
 <script>
-    function tab(id, el) {
-        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        el.classList.add('active');
-    }
-
-    let tr=0, tw=0, tb=0;
-    function addT(r){ tr+=r; tb++; updateT(); if(r==6) confetti(); }
-    function addExtra(){ tr+=1; updateT(); }
-    function takeW(){ if(tw<10){ tw++; tb++; updateT(); } }
-    function updateT(){
-        document.getElementById('t-scr').innerText = tr+'-'+tw;
-        document.getElementById('t-ov').innerText = Math.floor(tb/6)+'.'+(tb%6);
-    }
-    function resetT(){ if(confirm('Reset match?')){ tr=0; tw=0; tb=0; updateT(); } }
+    // Fake visitor count to increase trust
+    setInterval(() => {
+        let count = Math.floor(Math.random() * (260 - 240 + 1) + 240);
+        document.querySelector('.live-tag').innerText = `● LIVE: ${count} PEOPLE VIEWING`;
+    }, 5000);
 </script>
+
 </body>
 </html>
