@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Analyst Pro | Monetized</title>
+    <title>IPL Analyst Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
@@ -11,8 +11,8 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background: var(--bg); color: #fff; padding-bottom: 100px; }
 
-        /* NAVIGATION */
         header { padding: 15px; background: rgba(15,23,42,0.9); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        
         .nav-btm { position: fixed; bottom: 0; left: 0; right: 0; background: #1e293b; display: flex; justify-content: space-around; padding: 12px; border-top: 1px solid #334155; z-index: 1000; }
         .nav-btn { color: #64748b; font-size: 0.7rem; font-weight: 800; text-align: center; cursor: pointer; }
         .nav-btn.active { color: var(--accent); }
@@ -22,30 +22,25 @@
         .page.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* CARDS */
         .card { background: var(--card); border-radius: 20px; padding: 18px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
         
-        /* WIN PREDICTOR */
-        .wp-container { margin: 15px 0; }
-        .wp-bar { height: 12px; background: #334155; border-radius: 6px; display: flex; overflow: hidden; margin-top: 8px; }
-        .wp-team1 { background: var(--red); transition: 0.5s; }
-        .wp-team2 { background: var(--accent); transition: 0.5s; }
-
-        /* TURF SCORER UI */
-        .scorer-big { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--gold); }
+        /* TEAM INPUTS FOR TURF */
+        .turf-header { display: flex; gap: 10px; margin-bottom: 15px; }
+        .t-input { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid #334155; border-radius: 8px; padding: 8px; color: white; text-align: center; font-weight: 700; font-size: 0.8rem; }
+        
+        .scorer-big { font-size: 3.5rem; font-weight: 900; text-align: center; color: var(--gold); margin: 10px 0; }
         .btn-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
         .b-tool { border: none; padding: 15px; border-radius: 12px; font-weight: 800; background: #334155; color: white; }
 
-        /* STATS GRAPHS */
-        .bar-wrap { margin-bottom: 10px; }
-        .bar-fill { height: 8px; border-radius: 4px; background: var(--accent); margin-top: 4px; }
+        /* WIN PREDICTOR */
+        .wp-bar { height: 12px; background: #334155; border-radius: 6px; display: flex; overflow: hidden; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <header>
     <div style="font-weight: 900; color: var(--accent);">IPL ANALYST 2026</div>
-    <div id="live-indicator" style="font-size: 0.7rem; color: var(--red); font-weight: 800;">● MATCH STARTING SOON</div>
+    <div style="font-size: 0.7rem; color: var(--red); font-weight: 800;">● PRE-MATCH</div>
 </header>
 
 <div class="container">
@@ -54,83 +49,80 @@
         <div class="card">
             <div style="display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 800; color: var(--accent);">
                 <span>MATCH 23 • BENGALURU</span>
-                <span style="color:var(--red)">LIVE</span>
+                <span style="color:#94a3b8">STARTING @ 7:30 PM</span>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 20px 0;">
-                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: 900;">RCB</div><div id="s1" style="color: var(--gold); font-size: 1.5rem; font-weight: 900;">184/4</div></div>
-                <div style="font-weight: 900; color: #334155;">VS</div>
-                <div style="text-align: center;"><div style="font-size: 1.2rem; font-weight: 900;">LSG</div><div id="s2" style="color: #64748b; font-size: 1.5rem; font-weight: 900;">--</div></div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 25px 0;">
+                <div style="text-align: center;">
+                    <div style="font-size: 1.2rem; font-weight: 900;">RCB</div>
+                    <div style="color: #475569; font-size: 1.5rem; font-weight: 900;">0/0</div>
+                </div>
+                <div style="font-weight: 900; color: #1e293b;">VS</div>
+                <div style="text-align: center;">
+                    <div style="font-size: 1.2rem; font-weight: 900;">LSG</div>
+                    <div style="color: #475569; font-size: 1.5rem; font-weight: 900;">0/0</div>
+                </div>
             </div>
             
-            <div class="wp-container">
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; font-weight: 900;">
-                    <span>RCB (62%)</span>
-                    <span>LSG (38%)</span>
-                </div>
-                <div class="wp-bar">
-                    <div class="wp-team1" style="width: 62%;"></div>
-                    <div class="wp-team2" style="width: 38%;"></div>
-                </div>
-                <p style="font-size: 0.6rem; color: #64748b; text-align: center; margin-top: 5px;">*Win Predictor updates ball-by-ball</p>
+            <div style="text-align: center; font-size: 0.8rem; font-weight: 700; color: var(--gold);">
+                Win Predictor: Waiting for Toss...
+            </div>
+            <div class="wp-bar">
+                <div style="width: 50%; background: #334155; border-right: 1px solid #0f172a;"></div>
+                <div style="width: 50%; background: #334155;"></div>
             </div>
         </div>
 
-        <div class="card">
-            <div style="font-weight: 900; font-size: 0.9rem; color: var(--gold); margin-bottom: 10px;">🏟️ VENUE INSIGHT: CHINNASWAMY</div>
-            <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4;">
-                This venue favors batters. Average 1st innings score: 185. 
-                <strong>Virat Kohli</strong> averages 42.5 at this ground in his last 10 innings.
-            </p>
+        <div class="card" style="border-left: 4px solid var(--accent);">
+            <div style="font-weight: 900; font-size: 0.9rem; color: var(--accent);">TOSS UPDATE</div>
+            <p style="font-size: 0.8rem; color: #94a3b8; margin-top: 5px;">Toss will take place at 7:00 PM IST.</p>
         </div>
     </div>
 
     <div id="p-turf" class="page">
         <div class="card">
-            <h3 style="text-align: center; margin-bottom: 10px; color: var(--accent);">TURF MATCH SCORER</h3>
+            <div class="turf-header">
+                <input type="text" class="t-input" placeholder="TEAM A NAME">
+                <div style="align-self: center; font-weight: 900; font-size: 0.7rem;">VS</div>
+                <input type="text" class="t-input" placeholder="TEAM B NAME">
+            </div>
+            
             <div class="scorer-big" id="t-scr">0-0</div>
-            <div style="text-align: center; color: #64748b; font-weight: 700; margin-bottom: 15px;">OVERS: <span id="t-ov">0.0</span></div>
+            <div style="text-align: center; color: #64748b; font-weight: 700; margin-bottom: 20px;">OVERS: <span id="t-ov">0.0</span></div>
+            
             <div class="btn-grid">
                 <button class="b-tool" onclick="addT(1)">1</button>
                 <button class="b-tool" onclick="addT(2)">2</button>
                 <button class="b-tool" onclick="addT(3)">3</button>
                 <button class="b-tool" onclick="addT(4)" style="background: var(--accent); color: #000;">4</button>
                 <button class="b-tool" onclick="addT(6)" style="grid-column: span 4; background: var(--green); color: #000;">SIX (6)</button>
-                <button class="b-tool" onclick="takeW()" style="grid-column: span 4; background: var(--red);">WICKET</button>
-                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; font-size: 0.6rem;">RESET MATCH</button>
+                <button class="b-tool" onclick="takeW()" style="grid-column: span 4; background: var(--red);">WICKET (OUT)</button>
+                <button class="b-tool" onclick="resetT()" style="grid-column: span 4; font-size: 0.6rem; background: #1e293b; color: #64748b; margin-top: 10px;">RESET LOCAL MATCH</button>
             </div>
         </div>
     </div>
 
     <div id="p-stats" class="page">
         <div class="card">
-            <div style="font-weight: 900; margin-bottom: 15px;">PLAYER VENUE COMPARISON</div>
-            <div class="bar-wrap">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>V. Kohli (At Venue)</span> <span>88% Success</span></div>
-                <div class="bar-fill" style="width: 88%;"></div>
+            <div style="font-weight: 900; margin-bottom: 10px;">PLAYER VS VENUE PERFORMANCE</div>
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;"><span>Virat Kohli (M. Chinnaswamy)</span> <span>High</span></div>
+                    <div style="height: 6px; background: #334155; border-radius: 3px; margin-top: 5px;"><div style="width: 92%; height: 100%; background: var(--accent); border-radius: 3px;"></div></div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.75rem;"><span>KL Rahul (M. Chinnaswamy)</span> <span>Medium</span></div>
+                    <div style="height: 6px; background: #334155; border-radius: 3px; margin-top: 5px;"><div style="width: 65%; height: 100%; background: var(--gold); border-radius: 3px;"></div></div>
+                </div>
             </div>
-            <div class="bar-wrap">
-                <div style="display: flex; justify-content: space-between; font-size: 0.8rem;"><span>KL Rahul (At Venue)</span> <span>72% Success</span></div>
-                <div class="bar-fill" style="width: 72%; background: var(--gold);"></div>
-            </div>
-            <p style="font-size: 0.7rem; color: #64748b; margin-top: 10px;">Data based on last 5 years at M. Chinnaswamy.</p>
-        </div>
-        
-        <div class="card">
-            <div style="font-weight: 900; margin-bottom: 10px;">PAST PERFORMANCE GRAPH</div>
-            <svg viewBox="0 0 200 80" style="width: 100%; height: 80px;">
-                <polyline fill="none" stroke="#38bdf8" stroke-width="2" points="0,60 40,20 80,45 120,10 160,30 200,5" />
-                <circle cx="120" cy="10" r="3" fill="var(--gold)" />
-            </svg>
-            <p style="font-size: 0.6rem; text-align: center; color: #475569;">Season Batting Strike Rate Trend</p>
         </div>
     </div>
 
 </div>
 
 <div class="nav-btm">
-    <div class="nav-btn active" onclick="tab('p-live', this)">🏏<br>LIVE</div>
+    <div class="nav-btn active" onclick="tab('p-live', this)">🏏<br>IPL LIVE</div>
     <div class="nav-btn" onclick="tab('p-turf', this)">🏟️<br>TURF</div>
-    <div class="nav-btn" onclick="tab('p-stats', this)">📊<br>STATS</div>
+    <div class="nav-btn" onclick="tab('p-stats', this)">📊<br>ANALYSIS</div>
 </div>
 
 <script>
@@ -141,16 +133,14 @@
         el.classList.add('active');
     }
 
-    /* TURF SCORER LOGIC */
     let tr=0, tw=0, tb=0;
     function addT(r){ tr+=r; tb++; updateT(); }
     function takeW(){ tw++; tb++; updateT(); }
-    function resetT(){ tr=0; tw=0; tb=0; updateT(); }
+    function resetT(){ if(confirm("Reset Turf Match?")){ tr=0; tw=0; tb=0; updateT(); } }
     function updateT(){
         document.getElementById('t-scr').innerText = tr+'-'+tw;
         document.getElementById('t-ov').innerText = Math.floor(tb/6)+'.'+(tb%6);
     }
 </script>
-
 </body>
 </html>
