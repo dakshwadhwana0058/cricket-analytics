@@ -3,131 +3,242 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Cricket Pro: Analytics & Scorer</title>
     
+    <title>IPL Master Analytics</title>
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="IPL Master">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/5351/5351486.png">
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
     
     <style>
-        :root { --bg: #020617; --surface: #1e293b; --accent: #22c55e; --neon: #38bdf8; --gold: #fbbf24; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background-color: var(--bg); color: #f8fafc; min-height: 100vh; padding-bottom: 50px; }
+        :root { 
+            --bg: #020617; 
+            --surface: #1e293b; 
+            --accent: #22c55e; 
+            --neon: #38bdf8; 
+            --gold: #fbbf24; 
+        }
 
-        nav { background: rgba(15, 23, 42, 0.9); padding: 15px; display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; z-index: 1000; }
-        .logo { font-weight: 900; font-size: 0.9rem; color: var(--neon); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            background-color: var(--bg); 
+            background-image: radial-gradient(circle at top right, #1e1b4b, transparent),
+                              radial-gradient(circle at bottom left, #064e3b, transparent);
+            background-attachment: fixed;
+            color: #f8fafc; 
+            min-height: 100vh; 
+            padding-bottom: 50px; 
+        }
+
+        nav { 
+            background: rgba(15, 23, 42, 0.9); 
+            backdrop-filter: blur(10px);
+            padding: 15px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+            position: sticky; top: 0; z-index: 1000; 
+        }
+        
+        .logo { font-weight: 900; font-size: 1rem; color: var(--neon); letter-spacing: 1px; }
+        .logo span { color: #fff; }
 
         .container { padding: 15px; max-width: 500px; margin: 0 auto; }
         
-        /* Dashboard Cards */
-        .section-title { font-size: 1.2rem; font-weight: 800; margin: 25px 0 15px; color: var(--gold); text-transform: uppercase; }
-        .card { background: var(--surface); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 15px; }
+        .section-title { font-size: 1.1rem; font-weight: 800; margin: 25px 0 12px; color: var(--gold); text-transform: uppercase; letter-spacing: 1px; }
+        
+        .card { 
+            background: rgba(30, 41, 59, 0.5); 
+            backdrop-filter: blur(10px);
+            padding: 20px; 
+            border-radius: 25px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            margin-bottom: 15px; 
+        }
 
-        /* IPL Fixture List */
-        .fixture-list { max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        .match-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 12px; border-radius: 12px; font-size: 0.85rem; border-left: 4px solid var(--neon); }
+        /* Scorer Section */
+        .banner-btn { 
+            background: linear-gradient(135deg, var(--accent), #10b981); 
+            color: #000; padding: 18px; text-align: center; border-radius: 20px; 
+            font-weight: 900; cursor: pointer; margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(34, 197, 94, 0.2);
+            text-transform: uppercase;
+        }
+
+        #manager { 
+            display: none; 
+            background: rgba(15, 23, 42, 0.95); 
+            padding: 25px; border-radius: 30px; 
+            margin-top: 15px; border: 1px solid var(--neon);
+            box-shadow: 0 0 40px rgba(56, 189, 248, 0.15);
+        }
+
+        .score { font-size: 4.5rem; font-weight: 900; color: var(--gold); text-align: center; line-height: 1; margin: 15px 0; }
+        
+        .grid-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; }
+        input { 
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); 
+            background: rgba(0,0,0,0.3); color: white; text-align: center; outline: none;
+        }
+
+        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .btn { 
+            border: none; padding: 20px 5px; border-radius: 15px; font-weight: 900; 
+            cursor: pointer; font-size: 1.1rem; transition: transform 0.1s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .b-run { background: var(--neon); color: #020617; }
+        .b-4 { background: var(--accent); color: #020617; }
+        .b-6 { background: #a855f7; color: white; }
+        .b-out { background: #ef4444; color: white; grid-column: span 3; }
+
+        /* Fixtures */
+        .match-row { 
+            display: flex; justify-content: space-between; align-items: center; 
+            background: rgba(255,255,255,0.03); padding: 15px; border-radius: 15px; 
+            margin-bottom: 8px; border-left: 4px solid var(--neon); 
+        }
+        .vs { font-weight: 800; color: #fff; display: block; margin-bottom: 2px; }
         .match-info { color: #94a3b8; font-size: 0.75rem; }
-        .vs { font-weight: 800; color: #fff; }
+        .time { color: var(--gold); font-weight: 800; font-size: 0.9rem; }
 
-        /* Scorer (Hidden by default) */
-        #manager { display: none; background: rgba(30, 41, 59, 0.9); padding: 25px; border-radius: 30px; margin-bottom: 25px; border: 1px solid var(--neon); }
-        .score { font-size: 4rem; font-weight: 900; color: var(--gold); text-align: center; }
-        .btn { border: none; padding: 15px; border-radius: 12px; font-weight: 900; cursor: pointer; }
-        .controls { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .b-run { background: var(--neon); }
-        .b-4 { background: var(--accent); }
-        .b-6 { background: #a855f7; color: #fff; }
-
-        .banner-btn { background: linear-gradient(90deg, var(--accent), var(--neon)); color: #000; padding: 15px; text-align: center; border-radius: 15px; font-weight: 900; cursor: pointer; margin-bottom: 20px; }
+        .chase-msg { text-align: center; color: var(--gold); font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-    <nav><div class="logo">CRICKET<span>PRO</span> ANALYTICS</div></nav>
+    <nav>
+        <div class="logo">IPL MASTER <span>ANALYTICS</span></div>
+        <button id="vBtn" onclick="toggleV()" style="background:none; border:1px solid rgba(255,255,255,0.2); color:white; padding:5px 10px; border-radius:8px; font-size:0.7rem;">🔊 VOICE</button>
+    </nav>
 
     <div class="container">
         
-        <div class="banner-btn" onclick="toggleScorer()">OPEN LIVE SCORER</div>
+        <div class="banner-btn" onclick="toggleScorer()">🏏 OPEN LIVE SCORER</div>
 
         <section id="manager">
-            <input type="number" id="targ" placeholder="TARGET" style="width:48%; padding:10px; border-radius:8px;">
-            <input type="number" id="ovr" placeholder="OVERS" style="width:48%; padding:10px; border-radius:8px;">
+            <div class="grid-inputs">
+                <input type="number" id="targ" placeholder="TARGET" oninput="upd('')">
+                <input type="number" id="ovr" placeholder="OVERS" oninput="upd('')">
+            </div>
+            <div id="msg" class="chase-msg"></div>
             <div class="score" id="scr">0-0</div>
+            <p style="text-align:center; color:#94a3b8; font-size:0.8rem; margin-bottom:15px;">OVERS: <span id="ov">0.0</span></p>
+            
             <div class="controls">
-                <button class="btn b-run" onclick="run(1, 'Single')">+1</button>
-                <button class="btn b-4" onclick="run(4, 'Four!')">4</button>
-                <button class="btn b-6" onclick="run(6, 'Six!')">6</button>
-                <button class="btn" style="grid-column: span 3; background:#ef4444; color:white;" onclick="res()">RESET</button>
+                <button class="btn b-run" onclick="run(1, 'One run')">+1</button>
+                <button class="btn b-4" onclick="run(4, 'Four! Brilliant shot')">4</button>
+                <button class="btn b-6" onclick="run(6, 'Six! Massive hit')">6</button>
+                <button class="btn b-out" onclick="out()">WICKET</button>
+                <button class="btn" style="grid-column: span 3; background:none; color:#64748b; font-size:0.7rem;" onclick="res()">RESET MATCH</button>
             </div>
         </section>
 
-        <h2 class="section-title">Performance Comparison</h2>
+        <h2 class="section-title">Performance Insight</h2>
         <div class="card">
             <canvas id="compChart"></canvas>
-            <p style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 10px;">Domestic Avg Score vs. IPL Global Avg</p>
+            <p style="font-size: 0.7rem; color: #94a3b8; text-align: center; margin-top: 15px;">Domestic Player vs IPL Benchmark</p>
         </div>
 
-        <h2 class="section-title">IPL 2026 Upcoming</h2>
-        <div class="card">
-            <div class="fixture-list">
-                <div class="match-row">
-                    <div><span class="vs">RCB vs LSG</span><br><span class="match-info">Bengaluru | 15 April</span></div>
-                    <div style="color:var(--gold)">19:30</div>
-                </div>
-                <div class="match-row">
-                    <div><span class="vs">MI vs PBKS</span><br><span class="match-info">Mumbai | 16 April</span></div>
-                    <div style="color:var(--gold)">19:30</div>
-                </div>
-                <div class="match-row">
-                    <div><span class="vs">GT vs KKR</span><br><span class="match-info">Ahmedabad | 17 April</span></div>
-                    <div style="color:var(--gold)">19:30</div>
-                </div>
-                <div class="match-row">
-                    <div><span class="vs">RCB vs DC</span><br><span class="match-info">Bengaluru | 18 April</span></div>
-                    <div style="color:var(--gold)">15:30</div>
-                </div>
-                <div class="match-row">
-                    <div><span class="vs">SRH vs CSK</span><br><span class="match-info">Hyderabad | 18 April</span></div>
-                    <div style="color:var(--gold)">19:30</div>
-                </div>
+        <h2 class="section-title">IPL 2026 Schedule</h2>
+        <div class="card" style="padding: 10px;">
+            <div class="match-row">
+                <div><span class="vs">RCB vs LSG</span><span class="match-info">Bengaluru | April 15</span></div>
+                <div class="time">19:30</div>
+            </div>
+            <div class="match-row">
+                <div><span class="vs">MI vs PBKS</span><span class="match-info">Mumbai | April 16</span></div>
+                <div class="time">19:30</div>
+            </div>
+            <div class="match-row">
+                <div><span class="vs">GT vs KKR</span><span class="match-info">Ahmedabad | April 17</span></div>
+                <div class="time">19:30</div>
+            </div>
+            <div class="match-row">
+                <div><span class="vs">RCB vs DC</span><span class="match-info">Bengaluru | April 18</span></div>
+                <div class="time">15:30</div>
+            </div>
+            <div class="match-row">
+                <div><span class="vs">SRH vs CSK</span><span class="match-info">Hyderabad | April 18</span></div>
+                <div class="time">19:30</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Scoring Logic
-        let r=0, w=0, b=0;
+        let r=0, w=0, b=0, v=true;
+
+        function toggleV() { v=!v; document.getElementById('vBtn').innerText = v ? "🔊 VOICE" : "🔈 MUTE"; }
+        
+        function speak(t) {
+            if(!v) return;
+            window.speechSynthesis.cancel();
+            let m = new SpeechSynthesisUtterance(t);
+            m.rate = 1.1;
+            window.speechSynthesis.speak(m);
+        }
+
         function toggleScorer() { 
             let m = document.getElementById('manager');
             m.style.display = (m.style.display == 'block') ? 'none' : 'block';
+            if(m.style.display == 'block') speak("IPL Master Analytics Scorer Ready");
         }
-        function run(n, msg) { 
-            r+=n; b++; 
-            document.getElementById('scr').innerText = r+"-"+w;
-            let speech = new SpeechSynthesisUtterance(msg + ". Score " + r);
-            window.speechSynthesis.speak(speech);
-        }
-        function res() { r=0; w=0; b=0; document.getElementById('scr').innerText = "0-0"; }
 
-        // Chart.js Logic for Comparison
+        function run(n, c) { r+=n; b++; upd(c); }
+        function out() { if(w<10)w++; b++; upd("Wicket down!"); }
+
+        function upd(c) {
+            document.getElementById('scr').innerText = r+"-"+w;
+            document.getElementById('ov').innerText = Math.floor(b/6)+"."+(b%6);
+            
+            let t=parseInt(document.getElementById('targ').value), o=parseInt(document.getElementById('ovr').value), m=document.getElementById('msg'), s="";
+
+            if(t > 0 && o > 0) {
+                let bl=(o*6)-b, rn=t-r;
+                if(rn <= 0) { 
+                    m.innerText="🏆 TARGET ACHIEVED!"; confetti(); s="Target achieved! You win!";
+                } else if(bl <= 0 || w >= 10) { 
+                    m.innerText="🏁 MATCH OVER"; s="Match over.";
+                } else { 
+                    m.innerText=`${rn} runs needed in ${bl} balls`;
+                    s=rn + " needed in " + bl + " balls.";
+                }
+            }
+            if(c !== "") speak(c + ". Score " + r + " for " + w + ". " + s);
+        }
+
+        function res() { 
+            if(confirm("Clear match data?")) { r=0; w=0; b=0; upd(""); speak("Reset successful"); } 
+        }
+
+        // Analytics Chart
         const ctx = document.getElementById('compChart').getContext('2d');
         new Chart(ctx, {
             type: 'bar',
             data: {
-                labels: ['Run Rate', 'Avg Score', 'Boundary %'],
+                labels: ['Strike Rate', 'Avg Score', 'Boundary %'],
                 datasets: [{
-                    label: 'Domestic (Your Matches)',
-                    data: [7.2, 145, 12],
-                    backgroundColor: '#38bdf8'
+                    label: 'Domestic',
+                    data: [132, 145, 12],
+                    backgroundColor: '#38bdf8',
+                    borderRadius: 8
                 }, {
-                    label: 'IPL 2026 (Upcoming Avg)',
-                    data: [8.9, 178, 18],
-                    backgroundColor: '#fbbf24'
+                    label: 'IPL Avg',
+                    data: [148, 178, 18],
+                    backgroundColor: '#fbbf24',
+                    borderRadius: 8
                 }]
             },
             options: {
                 responsive: true,
-                plugins: { legend: { labels: { color: '#fff', font: { family: 'Outfit' } } } },
+                plugins: { legend: { labels: { color: '#fff' } } },
                 scales: {
                     y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
                     x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
