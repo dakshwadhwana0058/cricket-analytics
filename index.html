@@ -3,61 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>IPL Analyst Pro | Live Score</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>CricAnalyst Live | RCB vs LSG</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #020617; --card: #0f172a; --accent: #38bdf8; --gold: #fbbf24; --red: #ef4444; --green: #22c55e; }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
-        body { background: var(--bg); color: #fff; padding-bottom: 80px; }
+        :root { --cb-green: #009270; --cb-dark: #222b39; --cb-bg: #e3e6e8; --cb-white: #ffffff; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+        body { background: var(--cb-bg); color: #333; }
 
-        header { padding: 15px; background: rgba(15,23,42,0.95); border-bottom: 1px solid rgba(255,255,255,0.1); text-align: center; position: sticky; top: 0; z-index: 100; }
-        .live-dot { height: 8px; width: 8px; background: var(--red); border-radius: 50%; display: inline-block; margin-right: 5px; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+        /* HEADER CRICBUZZ STYLE */
+        header { background: var(--cb-dark); color: white; padding: 12px 15px; display: flex; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo-text { font-weight: 900; font-size: 1.2rem; letter-spacing: -0.5px; color: #fff; }
+        .logo-text span { color: #f0f0f0; font-weight: 400; font-size: 0.8rem; margin-left: 5px; }
 
-        .container { padding: 15px; max-width: 500px; margin: 0 auto; }
-        
-        /* WIDGET CONTAINER */
-        .score-widget { background: var(--card); border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); margin-bottom: 15px; min-height: 250px; }
+        .match-header { background: #333; color: #fff; padding: 8px 15px; font-size: 0.75rem; font-weight: 500; }
 
-        /* UPI BANNER */
-        .upi-banner { background: linear-gradient(135deg, #fbbf24, #f59e0b); border-radius: 20px; padding: 20px; margin-bottom: 15px; color: #000; text-align: center; border: 3px solid #fff; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .upi-btn { background: #000; color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: 900; display: block; margin-top: 10px; font-size: 1.1rem; }
+        .container { max-width: 500px; margin: 0 auto; }
 
-        .analyst-card { background: #1e293b; border-radius: 15px; padding: 15px; border-left: 5px solid var(--accent); margin-bottom: 15px; }
+        /* MAIN SCORECARD CARD */
+        .cb-card { background: var(--cb-white); margin-bottom: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .score-row { padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; }
+        .team-info { display: flex; align-items: center; gap: 10px; }
+        .team-name { font-weight: 700; font-size: 1.1rem; }
+        .live-score { font-size: 1.5rem; font-weight: 900; color: #000; }
+        .overs-text { font-size: 0.85rem; color: #666; font-weight: 400; margin-left: 5px; }
+
+        /* BATSMAN & BOWLER TABLE */
+        .stats-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .stats-table th { background: #f9f9f9; text-align: left; padding: 8px 15px; color: #666; font-weight: 500; border-bottom: 1px solid #eee; }
+        .stats-table td { padding: 10px 15px; border-bottom: 1px solid #f1f1f1; }
+        .is-on-strike::after { content: '*'; color: var(--cb-green); font-weight: 900; margin-left: 3px; }
+
+        /* OVER SUMMARY (BALLS) */
+        .over-summary { padding: 12px 15px; display: flex; align-items: center; gap: 8px; overflow-x: auto; background: #fff; }
+        .ball { width: 26px; height: 26px; border-radius: 50%; background: #eee; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; color: #444; flex-shrink: 0; }
+        .ball.four { background: #1976d2; color: white; }
+        .ball.six { background: #6a1b9a; color: white; }
+        .ball.wicket { background: #d32f2f; color: white; }
+
+        /* UPI ADS SECTION */
+        .ad-banner { background: #fff9c4; padding: 15px; text-align: center; border-top: 2px solid #fbc02d; }
+        .pay-btn { background: var(--cb-green); color: white; display: block; padding: 10px; border-radius: 4px; text-decoration: none; font-weight: 700; margin-top: 8px; }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="font-size: 0.7rem; font-weight: 900; color: var(--green);"><span class="live-dot"></span> LIVE MATCH TRACKER</div>
-    <div style="font-weight: 900; color: var(--accent); font-size: 1.2rem;">IPL ANALYST PRO</div>
+    <div class="logo-text">CricAnalyst <span>RCB vs LSG</span></div>
 </header>
 
+<div class="match-header">Royal Challengers Bengaluru vs Lucknow Super Giants, 15th Match</div>
+
 <div class="container">
-
-    <div class="upi-banner">
-        <div style="font-weight: 900; font-size: 0.9rem;">WINNING TEAM TIPS (2nd INNINGS)</div>
-        <div style="font-size: 1.4rem; font-weight: 900;">RCB CHASE SPECIAL ✅</div>
-        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="upi-btn">GET TIPS FOR ₹10</a>
-    </div>
-
-    <div class="score-widget">
-        <iframe src="https://www.scorebat.com/embed/livescore/" frameborder="0" width="100%" height="300" allowfullscreen allow='autoplay; fullscreen' style="width:100%; height:300px; overflow:hidden;"></iframe>
+    
+    <div class="cb-card">
+        <div class="score-row">
+            <div class="team-info">
+                <span class="team-name" style="color:#d32f2f">RCB</span>
+                <span class="live-score">24/1 <span class="overs-text">(2.4)</span></span>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 0.7rem; color: #d32f2f; font-weight: 900;">LIVE</div>
+                <div style="font-size: 0.75rem; color: #666;">CRR: 9.00</div>
+            </div>
         </div>
 
-    <div class="analyst-card">
-        <div style="font-weight: 900; color: var(--accent); font-size: 0.8rem; margin-bottom: 5px;">RATHEE'S STRATEGY</div>
-        <p style="font-size: 0.85rem; color: #cbd5e1; line-height: 1.4;">
-            RCB ki batting shuru hone wali hai. <strong>Digvesh Rathee</strong> ka 1st over crucial hoga. 
-            Pitch slow ho gayi hai, spinners match jitwayenge!
-        </p>
+        <table class="stats-table">
+            <tr>
+                <th>Batter</th>
+                <th>R</th>
+                <th>B</th>
+                <th>4s</th>
+                <th>6s</th>
+                <th>SR</th>
+            </tr>
+            <tr>
+                <td class="is-on-strike">Virat Kohli</td>
+                <td>12</td>
+                <td>8</td>
+                <td>2</td>
+                <td>0</td>
+                <td>150.0</td>
+            </tr>
+            <tr>
+                <td>Faf du Plessis</td>
+                <td>8</td>
+                <td>6</td>
+                <td>1</td>
+                <td>0</td>
+                <td>133.3</td>
+            </tr>
+        </table>
+
+        <table class="stats-table">
+            <tr>
+                <th>Bowler</th>
+                <th>O</th>
+                <th>M</th>
+                <th>R</th>
+                <th>W</th>
+                <th>ECO</th>
+            </tr>
+            <tr>
+                <td>M Siddharth</td>
+                <td>1.4</td>
+                <td>0</td>
+                <td>14</td>
+                <td>1</td>
+                <td>8.4</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="cb-card" style="padding: 10px 0;">
+        <div style="padding: 0 15px; font-size: 0.7rem; color: #888; font-weight: 700; margin-bottom: 5px;">RECENT BALLS</div>
+        <div class="over-summary">
+            <div class="ball">1</div>
+            <div class="ball four">4</div>
+            <div class="ball">0</div>
+            <div class="ball wicket">W</div>
+            <div class="ball">.</div>
+            <div class="ball six">6</div>
+            <div style="color: #999; font-size: 0.8rem; margin-left: 10px;">| Over 2</div>
+        </div>
+    </div>
+
+    <div class="cb-card ad-banner">
+        <div style="font-size: 0.85rem; font-weight: 700;">PRO TIP: Digvesh Rathee vs Kohli Battle?</div>
+        <div style="font-size: 0.75rem; color: #555;">Get the exact ball when Kohli might struggle!</div>
+        <a href="upi://pay?pa=dakkwadhwana15@okaxis&pn=IPLAnalyst&am=10&cu=INR" class="pay-btn">BUY PREDICTION ₹10</a>
     </div>
 
 </div>
 
-<div style="text-align: center; color: #475569; font-size: 0.6rem; padding: 10px;">
-    Data provided by IPL Analyst Professional Services
-</div>
+<script>
+    // Fake Live Visitor Counter
+    let visitors = 342;
+    setInterval(() => {
+        visitors += Math.floor(Math.random() * 5) - 2;
+        console.log("Live Visitors: " + visitors);
+    }, 3000);
+</script>
 
 </body>
 </html>
